@@ -15,16 +15,16 @@ interface Book {
 })
 export class Bookslist {
   books: Book[] = [
-    {title: 'The Great Gatsby', author: 'F. Scott Fitzgerald'},
-    {title: 'To Kill a Mockingbird', author: 'Harper Lee'},
-    {title: '1984', author: 'George Orwell'},
+    { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
+    { title: 'To Kill a Mockingbird', author: 'Harper Lee' },
+    { title: '1984', author: 'George Orwell' },
   ];
 
   newBookTitle: string = '';
   newBookAuthor: string = '';
 
   addNewBook() {
-    this.books.push({title: this.newBookTitle, author: this.newBookAuthor});
+    this.books.push({ title: this.newBookTitle, author: this.newBookAuthor });
     this.newBookTitle = '';
     this.newBookAuthor = '';
   }
