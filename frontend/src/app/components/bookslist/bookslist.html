@@ -1,0 +1,16 @@
+<span>Böcker lista:</span>
+<ul [class]="listClassName">
+  <!-- Interpolation example -->
+  <li *ngFor="let book of books">
+    <strong>{{ book.title }}</strong> by {{ book.author }}
+  </li>
+</ul>
+<div>
+  <div>
+    <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+  </div>
+  <div>
+    <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+  </div>
+</div>
+<button (click)="addNewBook()">Lägg till ny bok</button>
