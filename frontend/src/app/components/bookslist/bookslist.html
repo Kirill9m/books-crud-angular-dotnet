@@ -1,16 +1,50 @@
 <span>Böcker lista:</span>
 <ul [class]="listClassName">
   <!-- Interpolation example -->
-  <li *ngFor="let book of books">
-    <strong>{{ book.title }}</strong> by {{ book.author }}
-  </li>
+  @for (book of books; track $index) {
+    <li>
+      <strong>{{ book.title }}</strong> by {{ book.author }}
+      <button (click)="removeBook($index)">Ta bort</button>
+      <button (click)="toggleBookEditModal($index)">Redigera</button>
+    </li>
+  }
 </ul>
-<div>
-  <div>
-    <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+@if (isBookModalOpen) {
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="toggleBookModal()">Stäng</span>
+      <h2>Lägg till ny bok</h2>
+      <div>
+        <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+      </div>
+      <div>
+        <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+      </div>
+      @if (newBookTitle && newBookAuthor) {
+        <button (click)="addNewBook()">Lägg till</button>
+      }
+    </div>
   </div>
-  <div>
-    <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+} @else if (!isBookEditModalOpen) {
+  <button (click)="toggleBookModal()">Lägg till ny bok</button>
+}
+
+@if (isBookEditModalOpen) {
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="toggleBookEditModal(null)">Stäng</span>
+      <h2>Redigera bok</h2>
+      <div>
+        <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+      </div>
+      <div>
+        <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+      </div>
+      @if (newBookTitle && newBookAuthor) {
+        <button (click)="editBook(newBookTitle, newBookAuthor)">Spara ändringar</button>
+      }
+    </div>
   </div>
-</div>
-<button (click)="addNewBook()">Lägg till ny bok</button>
+}
+
+{{ errorMessage }}
