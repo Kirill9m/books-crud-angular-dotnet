@@ -28,6 +28,7 @@ export class Bookslist {
     this.books.push({ title: this.newBookTitle, author: this.newBookAuthor });
     this.newBookTitle = '';
     this.newBookAuthor = '';
+    this.isBookModalOpen = false;
   }
 
   removeBook(index: number) {
@@ -38,24 +39,28 @@ export class Bookslist {
     if (this.editingBookIndex !== null) {
       this.books[this.editingBookIndex] = { title: newTitle, author: newAuthor };
       this.isBookEditModalOpen = false;
+      this.editingBookIndex = null;
       this.newBookTitle = '';
       this.newBookAuthor = '';
     }
   }
 
+  showErrorMessage(message: string) {
+    this.errorMessage = message;
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 3000);
+  }
+
   isBookModalOpen: boolean = false;
   isBookEditModalOpen: boolean = false;
-  isButtonDisabled: boolean = false;
   editingBookIndex: number | null = null;
 
   toggleBookModal() {
     if (!this.isBookEditModalOpen) {
       this.isBookModalOpen = !this.isBookModalOpen;
     } else {
-      this.errorMessage = 'Close the add book modal before editing a book.';
-      setTimeout(() => {
-        this.errorMessage = '';
-      }, 3000);
+      this.showErrorMessage('Close the edit book modal before adding a book.');
     }
   }
 
@@ -69,15 +74,12 @@ export class Bookslist {
     }
 
     if (!this.isBookModalOpen && index >= 0 && index < this.books.length) {
-      this.isBookEditModalOpen = !this.isBookEditModalOpen;
+      this.isBookEditModalOpen = true;
       this.editingBookIndex = index;
       this.newBookTitle = this.books[index].title;
       this.newBookAuthor = this.books[index].author;
     } else if (this.isBookModalOpen) {
-      this.errorMessage = 'Close the add book modal before editing a book.';
-      setTimeout(() => {
-        this.errorMessage = '';
-      }, 3000);
+      this.showErrorMessage('Close the add book modal before editing a book.');
     }
   }
 
