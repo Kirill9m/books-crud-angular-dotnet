@@ -1,0 +1,7 @@
+echo "Formatting Angular..."
+cd frontend && npx prettier --write .
+
+echo "Formatting .NET..."
+cd ../backend/api && dotnet format
+
+cd ../..

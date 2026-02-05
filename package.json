@@ -1,0 +1,25 @@
+{
+  "name": "books-crud-angular-dotnet",
+  "version": "1.0.0",
+  "description": "Responsive CRUD application built with Angular 20 and .NET 9 Web API. Includes JWT authentication, Books management and \"My Quotes\" feature.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kirill9m/books-crud-angular-dotnet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Kirill9m/books-crud-angular-dotnet/issues"
+  },
+  "homepage": "https://github.com/Kirill9m/books-crud-angular-dotnet#readme",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
