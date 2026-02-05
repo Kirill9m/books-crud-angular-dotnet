@@ -31,3 +31,11 @@ coverage/
 # =========================
 .DS_Store
 Thumbs.db
+
+# =========================
+# Docker files
+# =========================
+.dockerignore
+Dockerfile
+docker-compose.yml
+# =========================
