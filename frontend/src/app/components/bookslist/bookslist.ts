@@ -96,7 +96,7 @@ export class Bookslist implements OnInit {
   }
 
   getBooksFromApi() {
-    this.http.get<Book[]>('http://localhost:5201/books').subscribe({
+    this.http.get<Book[]>('/books').subscribe({
       next: (data: Book[]) => {
         this.books = data;
       },
