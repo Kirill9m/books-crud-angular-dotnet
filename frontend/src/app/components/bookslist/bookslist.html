@@ -4,45 +4,103 @@
   @for (book of books; track $index) {
     <li>
       <strong>{{ book.title }}</strong> by {{ book.author }}
-      <button (click)="removeBook($index)">Ta bort</button>
-      <button (click)="toggleBookEditModal($index)">Redigera</button>
+      <fa-icon
+        [icon]="faPenToSquare"
+        class="btn"
+        role="button"
+        tabindex="0"
+        aria-label="Redigera bok"
+        (click)="toggleBookEditModal($index)"
+        (keydown.enter)="toggleBookEditModal($index)"
+        (keyup.space)="toggleBookEditModal($index)"
+      ></fa-icon>
+      <fa-icon
+        [icon]="faTrash"
+        class="btn"
+        role="button"
+        tabindex="0"
+        aria-label="Ta bort bok"
+        (click)="removeBook($index)"
+        (keydown.enter)="removeBook($index)"
+        (keyup.space)="removeBook($index)"
+      ></fa-icon>
     </li>
   }
 </ul>
 @if (isBookModalOpen) {
-  <div class="modal">
-    <div class="modal-content">
-      <span class="close" (click)="toggleBookModal()">Stäng</span>
-      <h2>Lägg till ny bok</h2>
-      <div>
-        <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+  <div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Lägg till ny bok</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="toggleBookModal()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+          </div>
+          <div>
+            <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          @if (newBookTitle && newBookAuthor) {
+            <button class="btn btn-success" (click)="addNewBook()">Lägg till</button>
+          } @else {
+            <button class="btn btn-success" (click)="addNewBook()" disabled>Lägg till</button>
+          }
+        </div>
       </div>
-      <div>
-        <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
-      </div>
-      @if (newBookTitle && newBookAuthor) {
-        <button (click)="addNewBook()">Lägg till</button>
-      }
     </div>
   </div>
 } @else if (!isBookEditModalOpen) {
-  <button (click)="toggleBookModal()">Lägg till ny bok</button>
+  <button class="btn btn-success" (click)="toggleBookModal()">Lägg till ny bok</button>
 }
 
 @if (isBookEditModalOpen) {
-  <div class="modal">
-    <div class="modal-content">
-      <span class="close" (click)="toggleBookEditModal(null)">Stäng</span>
-      <h2>Redigera bok</h2>
-      <div>
-        <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+  <div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Redigera bok</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="toggleBookEditModal(null)"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+          </div>
+          <div>
+            <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            (click)="toggleBookEditModal(null)"
+          >
+            Stäng
+          </button>
+          @if (newBookTitle && newBookAuthor) {
+            <button class="btn btn-primary" (click)="editBook(newBookTitle, newBookAuthor)">
+              Spara ändringar
+            </button>
+          }
+        </div>
       </div>
-      <div>
-        <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
-      </div>
-      @if (newBookTitle && newBookAuthor) {
-        <button (click)="editBook(newBookTitle, newBookAuthor)">Spara ändringar</button>
-      }
     </div>
   </div>
 }
