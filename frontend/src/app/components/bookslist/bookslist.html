@@ -1,4 +1,7 @@
-<span>{{ currentDate | date: 'longDate' }} Böcker lista:</span>
+<blockquote class="blockquote">
+  <p>{{ currentDate | date: 'longDate' }}</p>
+</blockquote>
+<span>Böcker lista:</span>
 <ul [class]="listClassName">
   @for (book of books; track $index) {
     <li>

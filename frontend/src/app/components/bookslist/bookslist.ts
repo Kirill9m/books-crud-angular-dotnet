@@ -4,6 +4,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { environment } from '../../../environments/environment';
 
 interface Book {
   title: string;
@@ -96,7 +97,7 @@ export class Bookslist implements OnInit {
   }
 
   getBooksFromApi() {
-    this.http.get<Book[]>('/books').subscribe({
+    this.http.get<Book[]>(`${environment.apiBaseUrl}/api/books`).subscribe({
       next: (data: Book[]) => {
         this.books = data;
       },
