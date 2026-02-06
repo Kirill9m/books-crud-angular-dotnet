@@ -29,33 +29,19 @@ app.UseCors();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-var summaries = new[]
+var books = new[]
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    new Book("The Great Gatsby", "F. Scott Fitzgerald"),
+    new Book("To Kill a Mockingbird", "Harper Lee"),
+    new Book("1984", "George Orwell"),
 };
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
+app.MapGet("/books", () => books)
+   .WithName("GetBooks");
 // Fallback to index.html for Angular routing
 app.MapFallbackToFile("index.html");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+public record Book(string Title, string Author);

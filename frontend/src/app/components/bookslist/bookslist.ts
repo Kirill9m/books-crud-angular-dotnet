@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -15,15 +16,11 @@ interface Book {
   templateUrl: './bookslist.html',
   styleUrl: './bookslist.css',
 })
-export class Bookslist {
+export class Bookslist implements OnInit {
   faPenToSquare = faPenToSquare;
   faTrash = faTrashCan;
 
-  books: Book[] = [
-    { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
-    { title: 'To Kill a Mockingbird', author: 'Harper Lee' },
-    { title: '1984', author: 'George Orwell' },
-  ];
+  books: Book[] = [];
 
   newBookTitle: string = '';
   newBookAuthor: string = '';
@@ -89,4 +86,24 @@ export class Bookslist {
   }
 
   listClassName = 'list';
+
+  currentDate: Date = new Date();
+
+  http = inject(HttpClient);
+
+  ngOnInit(): void {
+    this.getBooksFromApi();
+  }
+
+  getBooksFromApi() {
+    this.http.get<Book[]>('/books').subscribe({
+      next: (data: Book[]) => {
+        this.books = data;
+      },
+      error: (error) => {
+        console.error('Error fetching books:', error);
+        this.showErrorMessage('Failed to fetch books from API.');
+      },
+    });
+  }
 }

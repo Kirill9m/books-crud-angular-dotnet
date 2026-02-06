@@ -1,8 +1,8 @@
-<span>Böcker lista:</span>
+<span>{{ currentDate | date: 'longDate' }} Böcker lista:</span>
 <ul [class]="listClassName">
   @for (book of books; track $index) {
     <li>
-      <strong>{{ book.title }}</strong> by {{ book.author }}
+      <strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}
       <fa-icon
         [icon]="faPenToSquare"
         class="btn"
