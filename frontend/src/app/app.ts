@@ -24,4 +24,3 @@ export class App {
 
   isThemeDark: boolean = true;
 }
-
