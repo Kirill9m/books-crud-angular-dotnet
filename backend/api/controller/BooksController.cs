@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BooksApi.Models;
+using BooksApi.BookDto;
 
 namespace BooksApi.Controllers;
 [Route("api/[controller]")]
@@ -28,23 +29,29 @@ public class BooksController : ControllerBase
         return Ok(book);
     }
     [HttpPost]
-    public ActionResult<Book> AddBook(Book newBook)
+    public ActionResult<Book> AddBook(BookCreateDto newBook)
     {
-        if (newBook == null)
+        if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || string.IsNullOrWhiteSpace(newBook.Author))
         {
             return BadRequest();
         }
 
-        books.Add(newBook);
-        return CreatedAtAction(nameof(GetBookById), new { id = newBook.Id }, newBook);
+        var book = new Book(newBook.Title, newBook.Author);
+        books.Add(book);
+        return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
     }
     [HttpPut("{id}")]
-    public IActionResult UpdateBook(int id, Book updatedBook)
+    public IActionResult UpdateBook(int id, BookUpdateDto updatedBook)
     {
         var existingBook = books.FirstOrDefault(b => b.Id == id);
         if (existingBook == null)
         {
             return NotFound();
+        }
+
+        if (updatedBook == null || string.IsNullOrWhiteSpace(updatedBook.Title) || string.IsNullOrWhiteSpace(updatedBook.Author))
+        {
+            return BadRequest();
         }
 
         existingBook.Title = updatedBook.Title;
