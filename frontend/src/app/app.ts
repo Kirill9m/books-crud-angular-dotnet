@@ -3,19 +3,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
-import { NgStyle, TitleCasePipe } from '@angular/common';
+import { DatePipe, NgStyle, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    FontAwesomeModule,
-    RouterLink,
-    RouterOutlet,
-    FontAwesomeModule,
-    FormsModule,
-    NgStyle,
-    TitleCasePipe,
-  ],
+  imports: [FontAwesomeModule, RouterLink, RouterOutlet, FontAwesomeModule, FormsModule, NgStyle],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

@@ -1,4 +1,4 @@
-<span>Böcker lista:</span>
+<span>{{ currentDate | date: 'longDate' }} Böcker lista:</span>
 <ul [class]="listClassName">
   @for (book of books; track $index) {
     <li>
