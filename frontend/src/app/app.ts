@@ -4,10 +4,11 @@ import { Bookslist } from './components/bookslist/bookslist';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [FontAwesomeModule, RouterLink, RouterOutlet, FontAwesomeModule, FormsModule],
+  imports: [FontAwesomeModule, RouterLink, RouterOutlet, FontAwesomeModule, FormsModule, NgClass],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -19,12 +20,11 @@ export class App {
     const html = this.document.documentElement;
     const current = html.getAttribute('data-bs-theme') ?? 'light';
     html.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
-    if (current === 'dark') {
-      this.themeBtn = 'text-secondary';
-    } else {
-      this.themeBtn = 'text-warning';
-    }
   }
 
-  themeBtn = 'text-warning';
+  setThemeBtnColor(className: string) {
+    this.themeBtn.set(className);
+  }
+
+  themeBtn = signal<string>('text-secondary');
 }

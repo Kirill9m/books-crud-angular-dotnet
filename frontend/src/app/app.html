@@ -19,10 +19,13 @@
         <a class="nav-link" routerLink="login">Login</a>
         <fa-icon
           class="nav-link"
-          [class]="themeBtn"
+          [ngClass]="themeBtn()"
           [icon]="faBulb"
           role="button"
           (click)="toggleTheme()"
+          (click)="
+            setThemeBtnColor(themeBtn() === 'text-warning' ? 'text-secondary' : 'text-warning')
+          "
         ></fa-icon>
       </div>
     </div>
