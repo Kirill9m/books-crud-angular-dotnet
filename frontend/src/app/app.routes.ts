@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
 import { Bookslist } from './components/bookslist/bookslist';
+import { QuotesList } from './components/quotes-list/quotes-list';
 
 export const routes: Routes = [
   {
@@ -8,7 +9,11 @@ export const routes: Routes = [
     component: Login,
   },
   {
-    path: 'books',
+    path: '',
     component: Bookslist,
+  },
+  {
+    path: 'quotes',
+    component: QuotesList,
   },
 ];
