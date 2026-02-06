@@ -88,6 +88,5 @@ export class Bookslist {
     }
   }
 
-  //Property binding example
   listClassName = 'list';
 }

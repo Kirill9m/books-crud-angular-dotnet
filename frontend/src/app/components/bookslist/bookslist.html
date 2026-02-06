@@ -1,6 +1,5 @@
 <span>Böcker lista:</span>
 <ul [class]="listClassName">
-  <!-- Interpolation example -->
   @for (book of books; track $index) {
     <li>
       <strong>{{ book.title }}</strong> by {{ book.author }}
@@ -28,8 +27,16 @@
   }
 </ul>
 @if (isBookModalOpen) {
-  <div class="modal" tabindex="-1">
-    <div class="modal-dialog">
+  <div
+    class="modal fade show d-block"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Lägg till ny bok</h5>
@@ -42,20 +49,28 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div>
-            <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Boktitel</span>
+            <input type="text" class="form-control" [(ngModel)]="newBookTitle" />
           </div>
-          <div>
-            <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Författare</span>
+            <input type="text" class="form-control" [(ngModel)]="newBookAuthor" />
           </div>
         </div>
         <div class="modal-footer">
           @if (newBookTitle && newBookAuthor) {
             <button class="btn btn-success" (click)="addNewBook()">Lägg till</button>
           } @else {
-            <button class="btn btn-success" (click)="addNewBook()" disabled>Lägg till</button>
+            <button
+              class="btn btn-success"
+              (click)="showErrorMessage('Fyll i både titel och författare.')"
+            >
+              Lägg till
+            </button>
           }
         </div>
+        <span class="row justify-content-center text-danger">{{ errorMessage }}</span>
       </div>
     </div>
   </div>
@@ -64,8 +79,14 @@
 }
 
 @if (isBookEditModalOpen) {
-  <div class="modal" tabindex="-1">
-    <div class="modal-dialog">
+  <div
+    class="modal fade show d-block"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+  >
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Redigera bok</h5>
@@ -78,11 +99,13 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div>
-            <input type="text" [(ngModel)]="newBookTitle" placeholder="Boktitel" />
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Boktitel</span>
+            <input type="text" class="form-control" [(ngModel)]="newBookTitle" />
           </div>
-          <div>
-            <input type="text" [(ngModel)]="newBookAuthor" placeholder="Författare" />
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Författare</span>
+            <input type="text" class="form-control" [(ngModel)]="newBookAuthor" />
           </div>
         </div>
         <div class="modal-footer">
@@ -98,11 +121,19 @@
             <button class="btn btn-primary" (click)="editBook(newBookTitle, newBookAuthor)">
               Spara ändringar
             </button>
+          } @else {
+            <button
+              class="btn btn-primary"
+              (click)="showErrorMessage('Fyll i både titel och författare.')"
+            >
+              Spara ändringar
+            </button>
           }
+        </div>
+        <div>
+          <span class="row justify-content-center text-danger">{{ errorMessage }}</span>
         </div>
       </div>
     </div>
   </div>
 }
-
-{{ errorMessage }}
