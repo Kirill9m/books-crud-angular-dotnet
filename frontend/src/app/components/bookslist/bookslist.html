@@ -4,8 +4,26 @@
   @for (book of books; track $index) {
     <li>
       <strong>{{ book.title }}</strong> by {{ book.author }}
-      <fa-icon [icon]="faPenToSquare" class="btn" (click)="toggleBookEditModal($index)"></fa-icon>
-      <fa-icon [icon]="faTrash" class="btn" (click)="removeBook($index)"></fa-icon>
+      <fa-icon
+        [icon]="faPenToSquare"
+        class="btn"
+        role="button"
+        tabindex="0"
+        aria-label="Redigera bok"
+        (click)="toggleBookEditModal($index)"
+        (keydown.enter)="toggleBookEditModal($index)"
+        (keyup.space)="toggleBookEditModal($index)"
+      ></fa-icon>
+      <fa-icon
+        [icon]="faTrash"
+        class="btn"
+        role="button"
+        tabindex="0"
+        aria-label="Ta bort bok"
+        (click)="removeBook($index)"
+        (keydown.enter)="removeBook($index)"
+        (keyup.space)="removeBook($index)"
+      ></fa-icon>
     </li>
   }
 </ul>
@@ -32,8 +50,11 @@
           </div>
         </div>
         <div class="modal-footer">
-          <span (click)="toggleBookModal()">Stäng</span>
-          <button class="btn btn-success" (click)="addNewBook()">Lägg till</button>
+          @if (newBookTitle && newBookAuthor) {
+            <button class="btn btn-success" (click)="addNewBook()">Lägg till</button>
+          } @else {
+            <button class="btn btn-success" (click)="addNewBook()" disabled>Lägg till</button>
+          }
         </div>
       </div>
     </div>
