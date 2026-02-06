@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 interface Book {
   title: string;
@@ -9,11 +11,14 @@ interface Book {
 
 @Component({
   selector: 'app-bookslist',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './bookslist.html',
   styleUrl: './bookslist.css',
 })
 export class Bookslist {
+  faPenToSquare = faPenToSquare;
+  faTrash = faTrashCan;
+
   books: Book[] = [
     { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
     { title: 'To Kill a Mockingbird', author: 'Harper Lee' },
