@@ -1,27 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using BooksApi.Models;
 using BooksApi.BookDto;
+using BooksApi.Data;
 
 namespace BooksApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class BooksController : ControllerBase
 {
-    private static readonly List<Book> books =
-    [
-        new Book("The Great Gatsby", "F. Scott Fitzgerald"),
-        new Book("To Kill a Mockingbird", "Harper Lee"),
-        new Book("1984", "George Orwell"),
-    ];
-    [HttpGet]
-    public ActionResult<List<Book>> GetBooks()
+    private readonly AppDbContext db;
+
+    public BooksController(AppDbContext db)
     {
+        this.db = db;
+    }
+    [HttpGet]
+    public async Task<ActionResult<List<Book>>> GetBooks()
+    {
+        var books = await db.Books.ToListAsync();
         return Ok(books);
     }
     [HttpGet("{id}")]
-    public ActionResult<Book> GetBookById(int id)
+    public async Task<ActionResult<Book>> GetBookById(int id)
     {
-        var book = books.FirstOrDefault(b => b.Id == id);
+        var book = await db.Books.FindAsync(id);
         if (book == null)
         {
             return NotFound();
@@ -29,7 +32,7 @@ public class BooksController : ControllerBase
         return Ok(book);
     }
     [HttpPost]
-    public ActionResult<Book> AddBook(BookCreateDto newBook)
+    public async Task<ActionResult<Book>> AddBook(BookCreateDto newBook)
     {
         if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || string.IsNullOrWhiteSpace(newBook.Author))
         {
@@ -37,13 +40,14 @@ public class BooksController : ControllerBase
         }
 
         var book = new Book(newBook.Title, newBook.Author);
-        books.Add(book);
+        db.Books.Add(book);
+        await db.SaveChangesAsync();
         return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
     }
     [HttpPut("{id}")]
-    public IActionResult UpdateBook(int id, BookUpdateDto updatedBook)
+    public async Task<ActionResult<Book>> UpdateBook(int id, BookUpdateDto updatedBook)
     {
-        var existingBook = books.FirstOrDefault(b => b.Id == id);
+        var existingBook = await db.Books.FindAsync(id);
         if (existingBook == null)
         {
             return NotFound();
@@ -56,19 +60,21 @@ public class BooksController : ControllerBase
 
         existingBook.Title = updatedBook.Title;
         existingBook.Author = updatedBook.Author;
+        await db.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(existingBook);
     }
     [HttpDelete("{id}")]
-    public IActionResult DeleteBook(int id)
+    public async Task<IActionResult> DeleteBook(int id)
     {
-        var book = books.FirstOrDefault(b => b.Id == id);
+        var book = await db.Books.FindAsync(id);
         if (book == null)
         {
             return NotFound();
         }
 
-        books.Remove(book);
+        db.Books.Remove(book);
+        await db.SaveChangesAsync();
         return NoContent();
     }
 }

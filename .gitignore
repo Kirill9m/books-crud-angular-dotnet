@@ -39,3 +39,9 @@ Thumbs.db
 Dockerfile
 docker-compose.yml
 # =========================
+# Database files
+# =========================
+*.db
+*.db-shm
+*.db-wal
+*.db
