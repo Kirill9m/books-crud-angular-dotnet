@@ -23,8 +23,8 @@
 </div>
 <button (click)="onLogin()" type="button" class="btn btn-primary mt-3">Logga in</button>
 
-@if (errorMessage) {
-  <div class="alert alert-danger mt-3" role="alert">{{ errorMessage }}</div>
+@if (errorMessageService.errorMessage) {
+  <div class="alert alert-danger mt-3" role="alert">{{ errorMessageService.errorMessage }}</div>
 }
 
 <div class="mt-3">

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ErrorMessageService } from '../../service/ErrorMessageService';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +16,8 @@ export class Login {
   password: string = '';
 
   onLogin() {
-    this.showErrorMessage('Funktion och implementation saknas');
+    this.errorMessageService.showErrorMessage('Funktion och implementation saknas');
   }
 
-  showErrorMessage(message: string) {
-    this.errorMessage = message;
-    setTimeout(() => {
-      this.errorMessage = '';
-    }, 3000);
-  }
+  constructor(public errorMessageService: ErrorMessageService) {}
 }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ErrorMessageService } from '../../service/ErrorMessageService';
 
 @Component({
   selector: 'app-register',
@@ -11,27 +12,18 @@ import { RouterLink } from '@angular/router';
 })
 export class Register {
   errorMessage: string = '';
-  symbols: string = '';
+  passwordStrengthPercent: number = 0;
   email: string = '';
   password: string = '';
   repeatPassword: string = '';
 
   onRegister() {
-    this.showErrorMessage('Funktion och implementation saknas');
+    this.errorMessageService.showErrorMessage('Funktion och implementation saknas');
   }
 
-  showErrorMessage(message: string) {
-    this.errorMessage = message;
-    setTimeout(() => {
-      this.errorMessage = '';
-    }, 3000);
+  updatePasswordStrength() {
+    this.passwordStrengthPercent = Math.min(this.password.length * 12, 100);
   }
 
-  updateSymbols() {
-    if (this.password.length > 0) {
-      this.symbols = (this.password.length * 12).toString();
-    } else {
-      this.symbols = '';
-    }
-  }
+  constructor(public errorMessageService: ErrorMessageService) {}
 }
