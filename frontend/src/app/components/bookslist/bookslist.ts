@@ -47,16 +47,16 @@ export class Bookslist implements OnInit {
     }
   }
 
-  toggleBookEditModal(index: number | null) {
-    if (index === null) {
+  toggleBookEditModal(bookId: number | null) {
+    if (bookId === null) {
       this.isBookEditModalOpen = false;
       this.editingBookIndex = null;
       this.newBookTitle = '';
       this.newBookAuthor = '';
       return;
     }
-
-    if (!this.isBookModalOpen && index >= 0 && index < this.books.length) {
+    const index = this.books.findIndex((b) => b.id === bookId);
+    if (index >= 0 && !this.isBookModalOpen) {
       this.isBookEditModalOpen = true;
       this.editingBookIndex = index;
       this.newBookTitle = this.books[index].title;
@@ -108,15 +108,19 @@ export class Bookslist implements OnInit {
       });
   }
 
-  removeBook(index: number) {
-    const book = this.books[index];
-    if (!book || book.id === null) {
+  removeBook(bookId: number | null) {
+    if (bookId === null) {
       this.showErrorMessage('Invalid book ID for deletion.');
       return;
     }
-    this.http.delete(`${environment.apiBaseUrl}/api/books/${book.id}`).subscribe({
+    const bookIndex = this.books.findIndex((b) => b.id === bookId);
+    if (bookIndex === -1) {
+      this.showErrorMessage('Invalid book ID for deletion.');
+      return;
+    }
+    this.http.delete(`${environment.apiBaseUrl}/api/books/${bookId}`).subscribe({
       next: () => {
-        this.books.splice(index, 1);
+        this.books.splice(bookIndex, 1);
       },
       error: (error) => {
         console.error('Error deleting book:', error);
@@ -125,13 +129,17 @@ export class Bookslist implements OnInit {
     });
   }
 
-  editBook(index: number) {
-    if (index < 0 || index >= this.books.length) {
+  editBook() {
+    if (
+      this.editingBookIndex === null ||
+      this.editingBookIndex < 0 ||
+      this.editingBookIndex >= this.books.length
+    ) {
       this.showErrorMessage('Invalid book index for editing.');
       return;
     }
 
-    const book = this.books[index];
+    const book = this.books[this.editingBookIndex];
     if (!book || book.id === null) {
       this.showErrorMessage('Invalid book ID for editing.');
       return;
@@ -144,7 +152,7 @@ export class Bookslist implements OnInit {
       .subscribe({
         next: (updatedBook: Book) => {
           if (updatedBook && updatedBook.title && updatedBook.author) {
-            this.books[index] = updatedBook;
+            this.books[this.editingBookIndex!] = updatedBook;
             this.isBookEditModalOpen = false;
             this.editingBookIndex = null;
             this.newBookTitle = '';
