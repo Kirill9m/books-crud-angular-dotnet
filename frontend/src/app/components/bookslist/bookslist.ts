@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../environments/environment';
+import { ErrorMessageService } from '../../service/ErrorMessageService';
 
 interface Book {
   id: number | null;
@@ -23,17 +24,10 @@ export class Bookslist implements OnInit {
   faTrash = faTrashCan;
 
   books: Book[] = [];
+  constructor(public errorMessageService: ErrorMessageService) {}
 
   newBookTitle: string = '';
   newBookAuthor: string = '';
-  errorMessage: string = '';
-
-  showErrorMessage(message: string) {
-    this.errorMessage = message;
-    setTimeout(() => {
-      this.errorMessage = '';
-    }, 3000);
-  }
 
   isBookModalOpen: boolean = false;
   isBookEditModalOpen: boolean = false;
@@ -43,7 +37,7 @@ export class Bookslist implements OnInit {
     if (!this.isBookEditModalOpen) {
       this.isBookModalOpen = !this.isBookModalOpen;
     } else {
-      this.showErrorMessage('Close the edit book modal before adding a book.');
+      this.errorMessageService.showErrorMessage('Close the edit book modal before adding a book.');
     }
   }
 
@@ -62,7 +56,7 @@ export class Bookslist implements OnInit {
       this.newBookTitle = this.books[index].title;
       this.newBookAuthor = this.books[index].author;
     } else if (this.isBookModalOpen) {
-      this.showErrorMessage('Close the add book modal before editing a book.');
+      this.errorMessageService.showErrorMessage('Close the add book modal before editing a book.');
     }
   }
 
@@ -83,7 +77,7 @@ export class Bookslist implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching books:', error);
-        this.showErrorMessage('Failed to fetch books from API.');
+        this.errorMessageService.showErrorMessage('Failed to fetch books from API.');
       },
     });
   }
@@ -103,19 +97,19 @@ export class Bookslist implements OnInit {
         },
         error: (error) => {
           console.error('Error adding book:', error);
-          this.showErrorMessage('Failed to add book to API.');
+          this.errorMessageService.showErrorMessage('Failed to add book to API.');
         },
       });
   }
 
   removeBook(bookId: number | null) {
     if (bookId === null) {
-      this.showErrorMessage('Invalid book ID for deletion.');
+      this.errorMessageService.showErrorMessage('Invalid book ID for deletion.');
       return;
     }
     const bookIndex = this.books.findIndex((b) => b.id === bookId);
     if (bookIndex === -1) {
-      this.showErrorMessage('Invalid book ID for deletion.');
+      this.errorMessageService.showErrorMessage('Invalid book ID for deletion.');
       return;
     }
     this.http.delete(`${environment.apiBaseUrl}/api/books/${bookId}`).subscribe({
@@ -124,7 +118,7 @@ export class Bookslist implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting book:', error);
-        this.showErrorMessage('Failed to delete book from API.');
+        this.errorMessageService.showErrorMessage('Failed to delete book from API.');
       },
     });
   }
@@ -135,13 +129,13 @@ export class Bookslist implements OnInit {
       this.editingBookIndex < 0 ||
       this.editingBookIndex >= this.books.length
     ) {
-      this.showErrorMessage('Invalid book index for editing.');
+      this.errorMessageService.showErrorMessage('Invalid book index for editing.');
       return;
     }
 
     const book = this.books[this.editingBookIndex];
     if (!book || book.id === null) {
-      this.showErrorMessage('Invalid book ID for editing.');
+      this.errorMessageService.showErrorMessage('Invalid book ID for editing.');
       return;
     }
     this.http
@@ -158,12 +152,12 @@ export class Bookslist implements OnInit {
             this.newBookTitle = '';
             this.newBookAuthor = '';
           } else {
-            this.showErrorMessage('Invalid updated book returned from API.');
+            this.errorMessageService.showErrorMessage('Invalid updated book returned from API.');
           }
         },
         error: (error) => {
           console.error('Error updating book:', error);
-          this.showErrorMessage('Failed to update book in API.');
+          this.errorMessageService.showErrorMessage('Failed to update book in API.');
         },
       });
   }
