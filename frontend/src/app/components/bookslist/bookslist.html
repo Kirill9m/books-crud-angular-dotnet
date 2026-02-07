@@ -4,29 +4,31 @@
 <span>Böcker lista:</span>
 <ul [class]="listClassName">
   @for (book of books; track $index) {
-    <li>
-      <strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}
-      <fa-icon
-        [icon]="faPenToSquare"
-        class="btn"
-        role="button"
-        tabindex="0"
-        aria-label="Redigera bok"
-        (click)="toggleBookEditModal($index)"
-        (keydown.enter)="toggleBookEditModal($index)"
-        (keyup.space)="toggleBookEditModal($index)"
-      ></fa-icon>
-      <fa-icon
-        [icon]="faTrash"
-        class="btn"
-        role="button"
-        tabindex="0"
-        aria-label="Ta bort bok"
-        (click)="removeBook($index)"
-        (keydown.enter)="removeBook($index)"
-        (keyup.space)="removeBook($index)"
-      ></fa-icon>
-    </li>
+    @if (book) {
+      <li>
+        <strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}
+        <fa-icon
+          [icon]="faPenToSquare"
+          class="btn"
+          role="button"
+          tabindex="0"
+          aria-label="Redigera bok"
+          (click)="toggleBookEditModal($index)"
+          (keydown.enter)="toggleBookEditModal($index)"
+          (keyup.space)="toggleBookEditModal($index)"
+        ></fa-icon>
+        <fa-icon
+          [icon]="faTrash"
+          class="btn"
+          role="button"
+          tabindex="0"
+          aria-label="Ta bort bok"
+          (click)="removeBook($index)"
+          (keydown.enter)="removeBook($index)"
+          (keyup.space)="removeBook($index)"
+        ></fa-icon>
+      </li>
+    }
   }
 </ul>
 @if (isBookModalOpen) {
@@ -121,7 +123,7 @@
             Stäng
           </button>
           @if (newBookTitle && newBookAuthor) {
-            <button class="btn btn-primary" (click)="editBook(newBookTitle, newBookAuthor)">
+            <button class="btn btn-primary" (click)="editBook(editingBookIndex!)">
               Spara ändringar
             </button>
           } @else {
