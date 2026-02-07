@@ -35,7 +35,7 @@ DB ?
 ## Run Locally
 
 ### Backend
-cd backend/api
+cd backend
 dotnet run
 
 ### Frontend
