@@ -4,17 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  imports: [RouterLink, FormsModule, CommonModule],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  selector: 'app-register',
+  imports: [RouterLink, CommonModule, FormsModule],
+  templateUrl: './register.html',
+  styleUrl: './register.css',
 })
-export class Login {
+export class Register {
   errorMessage: string = '';
+  symbols: string = '';
   email: string = '';
   password: string = '';
+  repeatPassword: string = '';
 
-  onLogin() {
+  onRegister() {
     this.showErrorMessage('Funktion och implementation saknas');
   }
 
@@ -23,5 +25,13 @@ export class Login {
     setTimeout(() => {
       this.errorMessage = '';
     }, 3000);
+  }
+
+  updateSymbols() {
+    if (this.password.length > 0) {
+      this.symbols = (this.password.length * 12).toString();
+    } else {
+      this.symbols = '';
+    }
   }
 }
