@@ -3,7 +3,7 @@
 </blockquote>
 <span>Böcker lista:</span>
 <ul [class]="listClassName">
-  @for (book of books; track $index) {
+  @for (book of books; track book.id ?? $index) {
     @if (book) {
       <li>
         <strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}
