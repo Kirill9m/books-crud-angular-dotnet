@@ -37,6 +37,8 @@ DB ?
 ### Backend
 cd backend
 dotnet run
+https://www.nuget.org/
+openssl rand -base64 64
 
 ### Frontend
 cd frontend/client
