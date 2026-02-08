@@ -6,7 +6,7 @@ Includes JWT authentication, Books management and "My Quotes" feature.
 Frontend: Angular 20, Bootstrap, Font Awesome  
 Backend: .NET 9 Web API  
 Auth: JWT
-DB ?
+Database: SQLite
 
 ## Features
 
