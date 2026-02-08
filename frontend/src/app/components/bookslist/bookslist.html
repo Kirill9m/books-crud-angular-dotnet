@@ -7,26 +7,28 @@
     @if (book) {
       <li>
         <strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}
-        <fa-icon
-          [icon]="faPenToSquare"
-          class="btn"
-          role="button"
-          tabindex="0"
-          aria-label="Redigera bok"
-          (click)="toggleBookEditModal(book.id)"
-          (keydown.enter)="toggleBookEditModal(book.id)"
-          (keyup.space)="toggleBookEditModal(book.id)"
-        ></fa-icon>
-        <fa-icon
-          [icon]="faTrash"
-          class="btn"
-          role="button"
-          tabindex="0"
-          aria-label="Ta bort bok"
-          (click)="removeBook(book.id)"
-          (keydown.enter)="removeBook(book.id)"
-          (keyup.space)="removeBook(book.id)"
-        ></fa-icon>
+        @if (auth.isAuthed()) {
+          <fa-icon
+            [icon]="faPenToSquare"
+            class="btn"
+            role="button"
+            tabindex="0"
+            aria-label="Redigera bok"
+            (click)="toggleBookEditModal(book.id)"
+            (keydown.enter)="toggleBookEditModal(book.id)"
+            (keyup.space)="toggleBookEditModal(book.id)"
+          ></fa-icon>
+          <fa-icon
+            [icon]="faTrash"
+            class="btn"
+            role="button"
+            tabindex="0"
+            aria-label="Ta bort bok"
+            (click)="removeBook(book.id)"
+            (keydown.enter)="removeBook(book.id)"
+            (keyup.space)="removeBook(book.id)"
+          ></fa-icon>
+        }
       </li>
     }
   }
@@ -82,7 +84,9 @@
     </div>
   </div>
 } @else if (!isBookEditModalOpen) {
-  <button class="btn btn-success" (click)="toggleBookModal()">Lägg till ny bok</button>
+  @if (auth.isAuthed()) {
+    <button class="btn btn-success" (click)="toggleBookModal()">Lägg till ny bok</button>
+  }
 }
 @if (!isBookModalOpen && !isBookEditModalOpen) {
   <span class="row justify-content-center text-danger">{{ errorMessageService.errorMessage }}</span>

@@ -4,6 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { NgStyle } from '@angular/common';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,10 @@ import { NgStyle } from '@angular/common';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit {
   private readonly document = inject(DOCUMENT);
   faBulb = faLightbulb;
+  auth = inject(AuthService);
 
   toggleTheme() {
     const html = this.document.documentElement;
@@ -21,4 +23,10 @@ export class App {
     html.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
   }
   isThemeDark: boolean = true;
+
+  ngOnInit(): void {
+    if (localStorage.getItem('token')) {
+      this.auth.refreshMe().subscribe();
+    }
+  }
 }

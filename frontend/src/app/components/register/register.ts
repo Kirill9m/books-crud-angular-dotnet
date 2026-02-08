@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ErrorMessageService } from '../../service/ErrorMessageService';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +22,7 @@ export class Register {
 
   http = inject(HttpClient);
   router = inject(Router);
+  auth = inject(AuthService);
 
   onRegister() {
     if (this.password !== this.repeatPassword) {
@@ -39,7 +41,9 @@ export class Register {
       .subscribe({
         next: (response: string) => {
           localStorage.setItem('token', response);
-          this.router.navigate(['/']);
+          this.auth.refreshMe().subscribe(() => {
+            this.router.navigate(['/']);
+          });
         },
         error: (error) => {
           if (error.status === 400) {

@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ErrorMessageService } from '../../service/ErrorMessageService';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class Login {
 
   http = inject(HttpClient);
   router = inject(Router);
+  auth = inject(AuthService);
 
   onLogin() {
     this.http
@@ -33,7 +35,9 @@ export class Login {
       .subscribe({
         next: (response: string) => {
           localStorage.setItem('token', response);
-          this.router.navigate(['/']);
+          this.auth.refreshMe().subscribe(() => {
+            this.router.navigate(['/']);
+          });
         },
         error: (error) => {
           this.errorMessageService.showErrorMessage(
