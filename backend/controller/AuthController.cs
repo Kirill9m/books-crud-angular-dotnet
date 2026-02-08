@@ -1,11 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using BooksApi.Models;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using BooksApi.Services;
 using Microsoft.AspNetCore.Authorization;
 
@@ -18,16 +12,16 @@ namespace BooksApi.Controllers
         public static User user = new();
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<UserDtoResponse>> Register(UserDto request)
         {
-            var user = await authService.RegisterAsync(request);
+            var registeredUser = await authService.RegisterAsync(request);
 
-            if (user == null)
+            if (registeredUser == null)
             {
                 return BadRequest("User already exists");
             }
 
-            return Ok(user);
+            return Ok(new UserDtoResponse { Username = registeredUser.Username });
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)

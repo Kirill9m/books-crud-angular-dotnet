@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BooksApi.Models;
 using BooksApi.BookDto;
-using BooksApi.Data;
 using BooksApi.Services;
 using Microsoft.AspNetCore.Authorization;
 

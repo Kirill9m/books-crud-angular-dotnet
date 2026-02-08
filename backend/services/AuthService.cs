@@ -55,7 +55,9 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("AppSettings:Token")!));
+        var tokenValue = Environment.GetEnvironmentVariable("JWT_TOKEN");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenValue ?? string.Empty));
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -63,7 +65,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
             issuer: configuration.GetValue<string>("AppSettings:Issuer"),
             audience: configuration.GetValue<string>("AppSettings:Audience"),
             claims: claims,
-            expires: DateTime.Now.AddDays(1),
+            expires: DateTime.UtcNow.AddDays(1),
             signingCredentials: creds
         );
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
