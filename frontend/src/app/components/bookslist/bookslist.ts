@@ -96,8 +96,11 @@ export class Bookslist implements OnInit {
           this.isBookModalOpen = false;
         },
         error: (error) => {
-          console.error('Error adding book:', error);
-          this.errorMessageService.showErrorMessage('Failed to add book to API.');
+          if (error.status === 401) {
+            this.errorMessageService.showErrorMessage('Logga in för att lägga till en bok.');
+          } else {
+            this.errorMessageService.showErrorMessage('Failed to add book to API.');
+          }
         },
       });
   }
@@ -117,8 +120,11 @@ export class Bookslist implements OnInit {
         this.books.splice(bookIndex, 1);
       },
       error: (error) => {
-        console.error('Error deleting book:', error);
-        this.errorMessageService.showErrorMessage('Failed to delete book from API.');
+        if (error.status === 401) {
+          this.errorMessageService.showErrorMessage('Logga in för att ta bort en bok.');
+        } else {
+          this.errorMessageService.showErrorMessage('Failed to add book to API.');
+        }
       },
     });
   }
@@ -156,8 +162,11 @@ export class Bookslist implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error updating book:', error);
-          this.errorMessageService.showErrorMessage('Failed to update book in API.');
+          if (error.status === 401) {
+            this.errorMessageService.showErrorMessage('Logga in för att ändra en bok.');
+          } else {
+            this.errorMessageService.showErrorMessage('Failed to add book to API.');
+          }
         },
       });
   }

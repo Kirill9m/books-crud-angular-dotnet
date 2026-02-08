@@ -1,36 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BooksApi.Models;
 using BooksApi.BookDto;
-using BooksApi.Data;
+using BooksApi.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BooksApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class BooksController : ControllerBase
+public class BooksController(IBookService bookService) : ControllerBase
 {
-    private readonly AppDbContext db;
-
-    public BooksController(AppDbContext db)
-    {
-        this.db = db;
-    }
     [HttpGet]
     public async Task<ActionResult<List<Book>>> GetBooks()
     {
-        var books = await db.Books.ToListAsync();
+        var books = await bookService.GetBooksAsync();
         return Ok(books);
     }
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<Book>> GetBookById(int id)
     {
-        var book = await db.Books.FindAsync(id);
+        var book = await bookService.GetBookByIdAsync(id);
         if (book == null)
         {
             return NotFound();
         }
         return Ok(book);
     }
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Book>> AddBook(BookCreateDto newBook)
     {
@@ -40,41 +36,39 @@ public class BooksController : ControllerBase
         }
 
         var book = new Book(newBook.Title, newBook.Author);
-        db.Books.Add(book);
-        await db.SaveChangesAsync();
+        await bookService.CreateBookAsync(book);
         return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
     }
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<Book>> UpdateBook(int id, BookUpdateDto updatedBook)
     {
-        var existingBook = await db.Books.FindAsync(id);
-        if (existingBook == null)
-        {
-            return NotFound();
-        }
-
         if (updatedBook == null || string.IsNullOrWhiteSpace(updatedBook.Title) || string.IsNullOrWhiteSpace(updatedBook.Author))
         {
             return BadRequest();
         }
 
-        existingBook.Title = updatedBook.Title;
-        existingBook.Author = updatedBook.Author;
-        await db.SaveChangesAsync();
+        var newBook = new Book(updatedBook.Title, updatedBook.Author);
 
+        var existingBook = await bookService.UpdateBookAsync(id, newBook);
+
+        if (existingBook == null)
+        {
+            return NotFound();
+        }
         return Ok(existingBook);
     }
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {
-        var book = await db.Books.FindAsync(id);
-        if (book == null)
+        var result = await bookService.DeleteBookAsync(id);
+
+        if (!result)
         {
             return NotFound();
         }
 
-        db.Books.Remove(book);
-        await db.SaveChangesAsync();
         return NoContent();
     }
 }
