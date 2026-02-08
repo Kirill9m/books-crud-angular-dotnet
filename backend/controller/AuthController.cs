@@ -12,16 +12,16 @@ namespace BooksApi.Controllers
         public static User user = new();
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDtoResponse>> Register(UserDto request)
+        public async Task<ActionResult<string>> Register(UserDto request)
         {
-            var registeredUser = await authService.RegisterAsync(request);
+            var registeredUserToken = await authService.RegisterAsync(request);
 
-            if (registeredUser == null)
+            if (registeredUserToken == null)
             {
                 return BadRequest("User already exists");
             }
 
-            return Ok(new UserDtoResponse { Username = registeredUser.Username });
+            return Ok(registeredUserToken);
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
@@ -33,12 +33,15 @@ namespace BooksApi.Controllers
             }
             return Ok(token);
         }
-
         [Authorize]
-        [HttpGet]
-        public IActionResult AuthenticatedOnlyEndpoint()
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDtoResponse?>> GetCurrentUser()
         {
-            return Ok("You are authenticated");
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            {
+                var user = await authService.GetCurrentUserAsync(token);
+                return Ok(new UserDtoResponse { Username = user?.Username ?? string.Empty });
+            }
         }
     }
 }
