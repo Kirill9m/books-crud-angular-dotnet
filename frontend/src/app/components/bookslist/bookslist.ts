@@ -123,7 +123,7 @@ export class Bookslist implements OnInit {
         if (error.status === 401) {
           this.errorMessageService.showErrorMessage('Logga in för att ta bort en bok.');
         } else {
-          this.errorMessageService.showErrorMessage('Failed to add book to API.');
+          this.errorMessageService.showErrorMessage('Failed to delete book from API.');
         }
       },
     });
@@ -165,7 +165,7 @@ export class Bookslist implements OnInit {
           if (error.status === 401) {
             this.errorMessageService.showErrorMessage('Logga in för att ändra en bok.');
           } else {
-            this.errorMessageService.showErrorMessage('Failed to add book to API.');
+            this.errorMessageService.showErrorMessage('Failed to update book in API.');
           }
         },
       });
