@@ -4,6 +4,7 @@ using BooksApi.Models;
 using BooksApi.BookDto;
 using BooksApi.Data;
 using BooksApi.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BooksApi.Controllers;
 [Route("api/[controller]")]
@@ -16,6 +17,7 @@ public class BooksController(IBookService bookService) : ControllerBase
         var books = await bookService.GetBooksAsync();
         return Ok(books);
     }
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<Book>> GetBookById(int id)
     {
@@ -26,6 +28,7 @@ public class BooksController(IBookService bookService) : ControllerBase
         }
         return Ok(book);
     }
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Book>> AddBook(BookCreateDto newBook)
     {
@@ -38,6 +41,7 @@ public class BooksController(IBookService bookService) : ControllerBase
         await bookService.CreateBookAsync(book);
         return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
     }
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<Book>> UpdateBook(int id, BookUpdateDto updatedBook)
     {
@@ -56,6 +60,7 @@ public class BooksController(IBookService bookService) : ControllerBase
         }
         return Ok(existingBook);
     }
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {

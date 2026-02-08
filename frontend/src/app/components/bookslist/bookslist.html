@@ -84,6 +84,9 @@
 } @else if (!isBookEditModalOpen) {
   <button class="btn btn-success" (click)="toggleBookModal()">Lägg till ny bok</button>
 }
+@if (!isBookModalOpen && !isBookEditModalOpen) {
+  <span class="row justify-content-center text-danger">{{ errorMessageService.errorMessage }}</span>
+}
 
 @if (isBookEditModalOpen) {
   <div
