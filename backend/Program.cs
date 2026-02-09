@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
 
 var jwtToken = Environment.GetEnvironmentVariable("JWT_TOKEN");
 
