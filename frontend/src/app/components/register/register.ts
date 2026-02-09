@@ -47,9 +47,7 @@ export class Register {
         },
         error: (error) => {
           if (error.status === 400) {
-            this.errorMessageService.showErrorMessage(
-              'Användarnamnet är redan taget. Vänligen välj ett annat.',
-            );
+            this.errorMessageService.showErrorMessage(error.error);
           } else {
             this.errorMessageService.showErrorMessage(
               'Registrering misslyckades. Kontrollera användarnamn och lösenord.',

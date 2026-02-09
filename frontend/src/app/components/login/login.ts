@@ -40,9 +40,7 @@ export class Login {
           });
         },
         error: (error) => {
-          this.errorMessageService.showErrorMessage(
-            'Inloggning misslyckades. Kontrollera användarnamn och lösenord.',
-          );
+          this.errorMessageService.showErrorMessage(error.error);
         },
       });
   }
