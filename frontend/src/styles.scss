@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'bootstrap/scss/bootstrap';
+@use 'bootstrap/scss/bootstrap';
 
-@import './scss/theme-light.scss';
-@import './scss/theme-dark.scss';
+@use './scss/theme-light.scss';
+@use './scss/theme-dark.scss';
 
 .navbar.bg-body-tertiary {
   background-color: var(--bs-tertiary-bg) !important;

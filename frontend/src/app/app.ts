@@ -1,7 +1,7 @@
 import { Component, DOCUMENT, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCloudSun, faUser, faUserSlash } from '@fortawesome/free-solid-svg-icons';
+import { faCloudSun, faInfo, faUser, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { NgStyle } from '@angular/common';
 import { AuthService } from './auth/auth.service';
@@ -10,15 +10,17 @@ import { AuthService } from './auth/auth.service';
   selector: 'app-root',
   imports: [FontAwesomeModule, RouterLink, RouterOutlet, FormsModule, NgStyle],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.scss',
 })
 export class App implements OnInit {
   private readonly document = inject(DOCUMENT);
   faBulb = faCloudSun;
+  infoBtn = faInfo;
   userLogo = faUser;
   logoutLogo = faUserSlash;
   auth = inject(AuthService);
   isThemeDark: boolean = false;
+  hintClass: string = '';
 
   toggleTheme() {
     const html = this.document.documentElement;
@@ -27,6 +29,13 @@ export class App implements OnInit {
     html.setAttribute('data-bs-theme', newTheme);
     this.isThemeDark = newTheme === 'dark';
     localStorage.setItem('theme', newTheme);
+  }
+
+  showHint() {
+    this.hintClass = 'text-warning';
+    setTimeout(() => {
+      this.hintClass = '';
+    }, 3000);
   }
 
   ngOnInit(): void {

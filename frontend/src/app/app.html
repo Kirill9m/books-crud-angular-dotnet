@@ -26,6 +26,10 @@
           @if (auth.isAuthed()) {
             <a class="nav-link" routerLink="quotes">Quotes</a>
           }
+          @if (!auth.isAuthed()) {
+            <fa-icon class="nav-link" role="button" [icon]="infoBtn" (click)="showHint()">
+            </fa-icon>
+          }
         </div>
         <span class="d-flex">
           @if (!auth.isAuthed()) {
@@ -34,6 +38,7 @@
               role="button"
               [icon]="userLogo"
               routerLink="login"
+              [class]="hintClass"
             ></fa-icon>
           } @else {
             <span class="nav-link">Välkommen, {{ auth.me()?.username }}</span>
@@ -49,6 +54,11 @@
     </div>
   </div>
 </nav>
+@if (hintClass != '') {
+  <section class="position-fixed top-0 end-0 mt-5 me-4 alert alert-warning" [class]="hintClass">
+    Logga in för att se citat och redigera böcker.
+  </section>
+}
 <main class="container pt-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
