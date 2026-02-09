@@ -43,7 +43,7 @@ dotnet tool run dotnet-ef migrations add UpdateModel
 dotnet tool run dotnet-ef database update
 
 ### Frontend
-cd frontend/client
+cd frontend
 npm install
 npm start
 
