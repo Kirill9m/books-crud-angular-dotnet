@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   refreshMe() {
-    return this.http.get<MeDto>(`${environment.apiBaseUrl}/api/Auth/me`).pipe(
+    return this.http.get<MeDto>(`${environment.apiBaseUrl}/api/auth/me`).pipe(
       tap((user) => {
         this.me.set(user);
         this.isAuthed.set(true);

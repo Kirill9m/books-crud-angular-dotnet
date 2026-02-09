@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Text;
 using BooksApi.Data;
@@ -48,7 +47,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
         return CreateToken(user);
     }
 
-    public async Task<User?> GetCurrentUserAsync(String token)
+    public async Task<User?> GetCurrentUserAsync(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
@@ -59,7 +58,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
             return null;
         }
 
-        return username != null ? await context.Users.FirstOrDefaultAsync(u => u.Username == username) : null;
+        return await context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
     private string CreateToken(User user)

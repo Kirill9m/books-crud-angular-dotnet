@@ -1,14 +1,7 @@
 import { Component, DOCUMENT, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faCloudSun,
-  faLightbulb,
-  faRightFromBracket,
-  faRightToBracket,
-  faUser,
-  faUserSlash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCloudSun, faUser, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { NgStyle } from '@angular/common';
 import { AuthService } from './auth/auth.service';
