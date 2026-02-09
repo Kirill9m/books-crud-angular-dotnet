@@ -28,7 +28,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
         return CreateToken(user);
     }
 
-    public async Task<User?> RegisterAsync(UserDto request)
+    public async Task<string?> RegisterAsync(UserDto request)
     {
         if (await context.Users.AnyAsync(u => u.Username == request.Username))
         {
@@ -44,7 +44,21 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return user;
+        return CreateToken(user);
+    }
+
+    public async Task<User?> GetCurrentUserAsync(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(token);
+        var username = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return null;
+        }
+
+        return await context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
     private string CreateToken(User user)

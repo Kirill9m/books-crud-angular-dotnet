@@ -1,0 +1,23 @@
+.list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 700px) {
+  .modal-dialog {
+    max-width: 60vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .modal-dialog {
+    max-width: 720px;
+  }
+}

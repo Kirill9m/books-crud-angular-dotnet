@@ -1,26 +1,28 @@
-<h2 class="mb-3">Logga in</h2>
-<div class="mb-3">
-  <label for="emailinput" class="form-label">Email</label>
-  <input
-    type="email"
-    class="form-control"
-    id="emailinput"
-    placeholder="name@example.com"
-    [(ngModel)]="email"
-  />
-</div>
-<div class="mb-3">
-  <label for="passwordinput" class="form-label">Lösenord</label>
-  <input
-    type="password"
-    id="passwordinput"
-    class="form-control"
-    minlength="8"
-    maxlength="20"
-    [(ngModel)]="password"
-  />
-</div>
-<button (click)="onLogin()" type="button" class="btn btn-primary mt-3">Logga in</button>
+<section class="border list-group p-3 rounded">
+  <h2 class="mb-3">Logga in</h2>
+  <div class="mb-3">
+    <label for="usernameinput" class="form-label">Användarnamn</label>
+    <input
+      type="text"
+      class="form-control"
+      id="usernameinput"
+      placeholder="Användarnamn"
+      [(ngModel)]="username"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="passwordinput" class="form-label">Lösenord</label>
+    <input
+      type="password"
+      id="passwordinput"
+      class="form-control"
+      minlength="8"
+      maxlength="20"
+      [(ngModel)]="password"
+    />
+  </div>
+  <button (click)="onLogin()" type="button" class="btn btn-primary mt-3">Logga in</button>
+</section>
 
 @if (errorMessageService.errorMessage) {
   <div class="alert alert-danger mt-3" role="alert">{{ errorMessageService.errorMessage }}</div>

@@ -12,20 +12,35 @@ namespace BooksApi.Controllers
         public static User user = new();
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDtoResponse>> Register(UserDto request)
+        public async Task<ActionResult<string>> Register(UserDto request)
         {
-            var registeredUser = await authService.RegisterAsync(request);
+            if (request.Username == null || request.Password == null)
+            {
+                return BadRequest("Username and password are required");
+            }
 
-            if (registeredUser == null)
+            if (request.Username.Length < 3 || request.Password.Length < 8)
+            {
+                return BadRequest("Username must be at least 3 characters and password must be at least 8 characters");
+            }
+
+            var registeredUserToken = await authService.RegisterAsync(request);
+
+            if (registeredUserToken == null)
             {
                 return BadRequest("User already exists");
             }
 
-            return Ok(new UserDtoResponse { Username = registeredUser.Username });
+            return Ok(registeredUserToken);
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
+            if (request.Username == null || request.Password == null)
+            {
+                return BadRequest("Username and password are required");
+            }
+
             var token = await authService.LoginAsync(request);
             if (token == null)
             {
@@ -33,12 +48,21 @@ namespace BooksApi.Controllers
             }
             return Ok(token);
         }
-
         [Authorize]
-        [HttpGet]
-        public IActionResult AuthenticatedOnlyEndpoint()
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDtoResponse?>> GetCurrentUser()
         {
-            return Ok("You are authenticated");
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            {
+                var currentUser = await authService.GetCurrentUserAsync(token);
+                if (currentUser == null)
+                {
+                    return Unauthorized();
+                }
+                var claimedUsername = HttpContext.User?.Identity?.Name;
+                var usernameToReturn = string.IsNullOrEmpty(claimedUsername) ? currentUser.Username : claimedUsername;
+                return Ok(new UserDtoResponse { Username = usernameToReturn });
+            }
         }
     }
 }

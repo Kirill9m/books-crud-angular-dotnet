@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ErrorMessageService } from '../../service/ErrorMessageService';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +15,36 @@ import { ErrorMessageService } from '../../service/ErrorMessageService';
 })
 export class Login {
   errorMessage: string = '';
-  email: string = '';
+  username: string = '';
   password: string = '';
 
+  http = inject(HttpClient);
+  router = inject(Router);
+  auth = inject(AuthService);
+
   onLogin() {
-    this.errorMessageService.showErrorMessage('Funktion och implementation saknas');
+    this.http
+      .post(
+        `${environment.apiBaseUrl}/api/auth/login`,
+        {
+          username: this.username,
+          password: this.password,
+        },
+        { responseType: 'text' },
+      )
+      .subscribe({
+        next: (response: string) => {
+          localStorage.setItem('token', response);
+          this.auth.refreshMe().subscribe(() => {
+            this.router.navigate(['/']);
+          });
+        },
+        error: (error) => {
+          this.errorMessageService.showErrorMessage(
+            'Inloggning misslyckades. Kontrollera användarnamn och lösenord.',
+          );
+        },
+      });
   }
 
   constructor(public errorMessageService: ErrorMessageService) {}

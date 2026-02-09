@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../environments/environment';
 import { ErrorMessageService } from '../../service/ErrorMessageService';
+import { AuthService } from '../../auth/auth.service';
 
 interface Book {
   id: number | null;
@@ -17,11 +18,13 @@ interface Book {
   selector: 'app-bookslist',
   imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './bookslist.html',
-  styleUrl: './bookslist.css',
+  styleUrl: './bookslist.scss',
 })
 export class Bookslist implements OnInit {
   faPenToSquare = faPenToSquare;
   faTrash = faTrashCan;
+
+  auth = inject(AuthService);
 
   books: Book[] = [];
   constructor(public errorMessageService: ErrorMessageService) {}
