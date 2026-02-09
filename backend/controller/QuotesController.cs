@@ -10,7 +10,7 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
 {
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<List<Quote>>> GetQuotes()
+    public async Task<ActionResult<List<QuouteResponseDto>>> GetQuotes()
     {
         var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var currentUser = await authService.GetCurrentUserAsync(token);
@@ -20,12 +20,12 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
         }
 
         var quotes = await quoteService.GetQuotesAsync(currentUser.Id);
-        return Ok(quotes);
+        return Ok(quotes.Select(q => new QuouteResponseDto { Id = q.Id, Text = q.Text }).ToList());
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<Quote>> CreateQuote(QuoteCreateDto request)
+    public async Task<ActionResult<QuouteResponseDto>> CreateQuote(QuoteCreateDto request)
     {
         var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var currentUser = await authService.GetCurrentUserAsync(token);
@@ -41,6 +41,6 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
 
         var quote = new Quote(request.Text, currentUser.Id);
         var createdQuote = await quoteService.CreateQuoteAsync(quote);
-        return Ok(createdQuote);
+        return Ok(new QuouteResponseDto { Id = createdQuote.Id, Text = createdQuote.Text });
     }
 }
