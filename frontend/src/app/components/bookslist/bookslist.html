@@ -1,153 +1,208 @@
-<blockquote class="blockquote">
-  <p>{{ currentDate | date: 'longDate' }}</p>
-</blockquote>
-<span>Böcker lista:</span>
-<ul [class]="listClassName">
-  @for (book of books; track book.id ?? $index) {
-    @if (book) {
-      <li>
-        <strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}
-        @if (auth.isAuthed()) {
-          <fa-icon
-            [icon]="faPenToSquare"
-            class="btn"
-            role="button"
-            tabindex="0"
-            aria-label="Redigera bok"
-            (click)="toggleBookEditModal(book.id)"
-            (keydown.enter)="toggleBookEditModal(book.id)"
-            (keyup.space)="toggleBookEditModal(book.id)"
-          ></fa-icon>
-          <fa-icon
-            [icon]="faTrash"
-            class="btn"
-            role="button"
-            tabindex="0"
-            aria-label="Ta bort bok"
-            (click)="removeBook(book.id)"
-            (keydown.enter)="removeBook(book.id)"
-            (keyup.space)="removeBook(book.id)"
-          ></fa-icon>
+<div class="d-flex flex-column gap-3">
+  <blockquote class="blockquote">
+    <p>{{ currentDate | date: 'longDate' }}</p>
+  </blockquote>
+  <section>
+    <h2>Böcker lista:</h2>
+    <ul [class]="listClassName" class="list-group">
+      @for (book of books; track book.id ?? $index) {
+        @if (book) {
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span
+              ><strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}</span
+            >
+            @if (auth.isAuthed()) {
+              <div class="btn-group" role="group">
+                <fa-icon
+                  [icon]="faPenToSquare"
+                  class="btn btn-outline-primary btn-sm"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Redigera bok"
+                  (click)="toggleBookEditModal(book.id)"
+                  (keydown.enter)="toggleBookEditModal(book.id)"
+                  (keyup.space)="toggleBookEditModal(book.id)"
+                ></fa-icon>
+                <fa-icon
+                  [icon]="faTrash"
+                  class="btn btn-outline-danger btn-sm"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Ta bort bok"
+                  (click)="removeBook(book.id)"
+                  (keydown.enter)="removeBook(book.id)"
+                  (keyup.space)="removeBook(book.id)"
+                ></fa-icon>
+              </div>
+            }
+          </li>
         }
-      </li>
+      }
+    </ul>
+  </section>
+
+  @if (isBookModalOpen) {
+    <div
+      class="modal fade show d-block"
+      id="addBookModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="addBookModalLabel"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addBookModalLabel">Lägg till ny bok</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              (click)="toggleBookModal()"
+            ></button>
+          </div>
+          <form>
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <span class="input-group-text">Boktitel</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="newBookTitle"
+                  name="title"
+                  required
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">Författare</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="newBookAuthor"
+                  name="author"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="toggleBookModal()">
+                Avbryt
+              </button>
+              @if (newBookTitle && newBookAuthor) {
+                <button type="button" class="btn btn-primary" (click)="addNewBook()">
+                  Lägg till
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="
+                    errorMessageService.showErrorMessage('Fyll i både titel och författare.')
+                  "
+                >
+                  Lägg till
+                </button>
+              }
+            </div>
+          </form>
+          @if (errorMessageService.errorMessage) {
+            <div class="alert alert-danger mx-3 mb-3">{{ errorMessageService.errorMessage }}</div>
+          }
+        </div>
+      </div>
+    </div>
+  } @else if (!isBookEditModalOpen) {
+    @if (auth.isAuthed()) {
+      <button type="button" class="btn btn-primary" (click)="toggleBookModal()">
+        Lägg till ny bok
+      </button>
     }
   }
-</ul>
-@if (isBookModalOpen) {
-  <div
-    class="modal fade show d-block"
-    id="staticBackdrop"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    role="dialog"
-    aria-modal="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Lägg till ny bok</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            (click)="toggleBookModal()"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Boktitel</span>
-            <input type="text" class="form-control" [(ngModel)]="newBookTitle" />
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Författare</span>
-            <input type="text" class="form-control" [(ngModel)]="newBookAuthor" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          @if (newBookTitle && newBookAuthor) {
-            <button class="btn btn-success" (click)="addNewBook()">Lägg till</button>
-          } @else {
-            <button
-              class="btn btn-success"
-              (click)="errorMessageService.showErrorMessage('Fyll i både titel och författare.')"
-            >
-              Lägg till
-            </button>
-          }
-        </div>
-        <span class="row justify-content-center text-danger">{{
-          errorMessageService.errorMessage
-        }}</span>
-      </div>
-    </div>
-  </div>
-} @else if (!isBookEditModalOpen) {
-  @if (auth.isAuthed()) {
-    <button class="btn btn-success" (click)="toggleBookModal()">Lägg till ny bok</button>
-  }
-}
-@if (!isBookModalOpen && !isBookEditModalOpen) {
-  <span class="row justify-content-center text-danger">{{ errorMessageService.errorMessage }}</span>
-}
 
-@if (isBookEditModalOpen) {
-  <div
-    class="modal fade show d-block"
-    id="staticBackdrop"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Redigera bok</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            (click)="toggleBookEditModal(null)"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Boktitel</span>
-            <input type="text" class="form-control" [(ngModel)]="newBookTitle" />
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Författare</span>
-            <input type="text" class="form-control" [(ngModel)]="newBookAuthor" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            (click)="toggleBookEditModal(null)"
-          >
-            Stäng
-          </button>
-          @if (newBookTitle && newBookAuthor) {
-            <button class="btn btn-primary" (click)="editBook()">Spara ändringar</button>
-          } @else {
+  @if (!isBookModalOpen && !isBookEditModalOpen && errorMessageService.errorMessage) {
+    <div class="alert alert-danger">{{ errorMessageService.errorMessage }}</div>
+  }
+
+  @if (isBookEditModalOpen) {
+    <div
+      class="modal fade show d-block"
+      id="editBookModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="editBookModalLabel"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editBookModalLabel">Redigera bok</h5>
             <button
-              class="btn btn-primary"
-              (click)="errorMessageService.showErrorMessage('Fyll i både titel och författare.')"
-            >
-              Spara ändringar
-            </button>
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              (click)="toggleBookEditModal(null)"
+            ></button>
+          </div>
+          <form>
+            <div class="modal-body">
+              <div class="input-group mb-3">
+                <span class="input-group-text">Boktitel</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="newBookTitle"
+                  name="title"
+                  required
+                />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">Författare</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="newBookAuthor"
+                  name="author"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                (click)="toggleBookEditModal(null)"
+              >
+                Stäng
+              </button>
+              @if (newBookTitle && newBookAuthor) {
+                <button type="button" class="btn btn-primary" (click)="editBook()">
+                  Spara ändringar
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="
+                    errorMessageService.showErrorMessage('Fyll i både titel och författare.')
+                  "
+                >
+                  Spara ändringar
+                </button>
+              }
+            </div>
+          </form>
+          @if (errorMessageService.errorMessage) {
+            <div class="alert alert-danger mx-3 mb-3">{{ errorMessageService.errorMessage }}</div>
           }
-        </div>
-        <div>
-          <span class="row justify-content-center text-danger">{{
-            errorMessageService.errorMessage
-          }}</span>
         </div>
       </div>
     </div>
-  </div>
-}
+  }
+</div>

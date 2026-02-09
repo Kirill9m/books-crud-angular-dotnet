@@ -1,7 +1,14 @@
 import { Component, DOCUMENT, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCloudSun,
+  faLightbulb,
+  faRightFromBracket,
+  faRightToBracket,
+  faUser,
+  faUserSlash,
+} from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
 import { NgStyle } from '@angular/common';
 import { AuthService } from './auth/auth.service';
@@ -14,19 +21,31 @@ import { AuthService } from './auth/auth.service';
 })
 export class App implements OnInit {
   private readonly document = inject(DOCUMENT);
-  faBulb = faLightbulb;
+  faBulb = faCloudSun;
+  userLogo = faUser;
+  logoutLogo = faUserSlash;
   auth = inject(AuthService);
+  isThemeDark: boolean = false;
 
   toggleTheme() {
     const html = this.document.documentElement;
     const current = html.getAttribute('data-bs-theme') ?? 'light';
-    html.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-bs-theme', newTheme);
+    this.isThemeDark = newTheme === 'dark';
+    localStorage.setItem('theme', newTheme);
   }
-  isThemeDark: boolean = true;
 
   ngOnInit(): void {
+    this.isThemeDark = this.document.documentElement.getAttribute('data-bs-theme') === 'dark';
     if (localStorage.getItem('token')) {
       this.auth.refreshMe().subscribe();
+    }
+
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      this.document.documentElement.setAttribute('data-bs-theme', storedTheme);
+      this.isThemeDark = storedTheme === 'dark';
     }
   }
 }

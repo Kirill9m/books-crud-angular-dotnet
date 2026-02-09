@@ -1,5 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
+    <fa-icon
+      class="p-2"
+      [ngStyle]="{ color: isThemeDark ? 'yellow' : 'black' }"
+      [icon]="faBulb"
+      role="button"
+      (click)="toggleTheme()"
+    ></fa-icon>
     <a class="navbar-brand" href="#">Book store</a>
     <button
       class="navbar-toggler"
@@ -13,23 +20,31 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
-        @if (auth.isAuthed()) {
-          <a class="nav-link" routerLink="quotes">Quotes</a>
-        }
-        @if (!auth.isAuthed()) {
-          <a class="nav-link" routerLink="login">Login</a>
-        } @else {
-          <a class="nav-link" role="button" (click)="auth.logout()">Logout</a>
-        }
-        <fa-icon
-          class="nav-link"
-          [ngStyle]="{ color: isThemeDark ? 'yellow' : 'black' }"
-          [icon]="faBulb"
-          role="button"
-          (click)="toggleTheme()"
-        ></fa-icon>
+      <div class="navbar-nav d-flex justify-content-between w-100">
+        <div class="d-flex">
+          <a class="nav-link" aria-current="page" routerLink="/">Home</a>
+          @if (auth.isAuthed()) {
+            <a class="nav-link" routerLink="quotes">Quotes</a>
+          }
+        </div>
+        <span class="d-flex">
+          @if (!auth.isAuthed()) {
+            <fa-icon
+              class="nav-link text-primary"
+              role="button"
+              [icon]="userLogo"
+              routerLink="login"
+            ></fa-icon>
+          } @else {
+            <span class="nav-link">Välkommen, {{ auth.me()?.username }}</span>
+            <fa-icon
+              class="nav-link"
+              role="button"
+              (click)="auth.logout()"
+              [icon]="logoutLogo"
+            ></fa-icon>
+          }
+        </span>
       </div>
     </div>
   </div>

@@ -18,7 +18,7 @@ interface Book {
   selector: 'app-bookslist',
   imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './bookslist.html',
-  styleUrl: './bookslist.css',
+  styleUrl: './bookslist.scss',
 })
 export class Bookslist implements OnInit {
   faPenToSquare = faPenToSquare;
