@@ -16,19 +16,19 @@ namespace BooksApi.Controllers
         {
             if (request.Username == null || request.Password == null)
             {
-                return BadRequest("Username and password are required");
+                return BadRequest("Användarnamn och lösenord krävs");
             }
 
             if (request.Username.Length < 3 || request.Password.Length < 8)
             {
-                return BadRequest("Username must be at least 3 characters and password must be at least 8 characters");
+                return BadRequest("Användarnamn måste vara minst 3 tecken och lösenord måste vara minst 8 tecken");
             }
 
             var registeredUserToken = await authService.RegisterAsync(request);
 
             if (registeredUserToken == null)
             {
-                return BadRequest("User already exists");
+                return BadRequest("Användaren finns redan");
             }
 
             return Ok(registeredUserToken);
@@ -38,13 +38,13 @@ namespace BooksApi.Controllers
         {
             if (request.Username == null || request.Password == null)
             {
-                return BadRequest("Username and password are required");
+                return BadRequest("Användarnamn och lösenord krävs");
             }
 
             var token = await authService.LoginAsync(request);
             if (token == null)
             {
-                return BadRequest("Invalid username or password");
+                return BadRequest("Ogiltigt användarnamn eller lösenord");
             }
             return Ok(token);
         }
@@ -57,7 +57,7 @@ namespace BooksApi.Controllers
                 var currentUser = await authService.GetCurrentUserAsync(token);
                 if (currentUser == null)
                 {
-                    return Unauthorized();
+                    return Unauthorized("Användaren är inte auktoriserad");
                 }
                 var claimedUsername = HttpContext.User?.Identity?.Name;
                 var usernameToReturn = string.IsNullOrEmpty(claimedUsername) ? currentUser.Username : claimedUsername;
