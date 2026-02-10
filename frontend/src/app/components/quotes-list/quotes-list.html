@@ -1,1 +1,69 @@
-<p>quotes-list works!</p>
+<ul class="list-group list-group-flush">
+  <h1 class="list-group-item fs-2">Mina citat:</h1>
+  @for (quote of quotes; track quote.id ?? $index) {
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <p>{{ quote.text }}</p>
+      @if (selectedQuoteId === quote.id) {
+        <div class="btn-group gap-1" role="group">
+          <fa-icon
+            [icon]="faEye"
+            class="btn btn-sm"
+            role="button"
+            tabindex="0"
+            aria-label="Dölj alternativ"
+            (click)="toggleBtnHidden(null)"
+          ></fa-icon>
+          <fa-icon
+            [icon]="faPenToSquare"
+            class="btn btn-outline-primary btn-sm"
+            role="button"
+            tabindex="0"
+            aria-label="Redigera citat"
+            (click)="editQuote(quote.id)"
+          ></fa-icon>
+          <fa-icon
+            [icon]="faTrash"
+            class="btn btn-outline-danger btn-sm"
+            role="button"
+            tabindex="0"
+            aria-label="Ta bort citat"
+            (click)="removeQuote(quote.id)"
+          ></fa-icon>
+        </div>
+      } @else {
+        <fa-icon
+          [icon]="faEllipsis"
+          class="btn btn-outline-secondary btn-sm"
+          role="button"
+          tabindex="0"
+          aria-label="Visa alternativ"
+          (click)="toggleBtnHidden(quote.id)"
+        ></fa-icon>
+      }
+    </li>
+  }
+  @if (quotes.length === 0) {
+    <li class="list-group-item p-3 text-md-center font-weight-bold text-uppercase">
+      Listan är tom
+    </li>
+  }
+</ul>
+<section class="list-group gap-3">
+  <div class="input-group">
+    @if (quoteEditMode) {
+      <span class="input-group-text text-warning">Redigera citat</span>
+    } @else {
+      <span class="input-group-text">Nytt citat</span>
+    }
+    <textarea class="form-control" aria-label="With textarea" [(ngModel)]="newQuoteText"></textarea>
+  </div>
+  @if (quoteEditMode) {
+    <button (click)="updateQuote()" type="button" class="btn btn-warning">Spara ändringar</button>
+    <button (click)="editQuote(null)" type="button" class="btn btn-secondary">Avbryt</button>
+  } @else {
+    <button (click)="addNewQuote()" type="button" class="btn btn-primary">Lägg till</button>
+  }
+  @if (errorMessageService.errorMessage) {
+    <div class="alert alert-danger">{{ errorMessageService.errorMessage }}</div>
+  }
+</section>

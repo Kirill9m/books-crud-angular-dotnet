@@ -11,8 +11,16 @@
             <span
               ><strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}</span
             >
-            @if (auth.isAuthed()) {
-              <div class="btn-group" role="group">
+            @if (auth.isAuthed() && selectedBookId === book.id) {
+              <div class="btn-group gap-1" role="group">
+                <fa-icon
+                  [icon]="faEye"
+                  class="btn btn-sm"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Dölj alternativ"
+                  (click)="toggleBtnHidden(null)"
+                ></fa-icon>
                 <fa-icon
                   [icon]="faPenToSquare"
                   class="btn btn-outline-primary btn-sm"
@@ -34,9 +42,23 @@
                   (keyup.space)="removeBook(book.id)"
                 ></fa-icon>
               </div>
+            } @else if (auth.isAuthed()) {
+              <fa-icon
+                [icon]="faEllipsis"
+                class="btn btn-outline-secondary btn-sm"
+                role="button"
+                tabindex="0"
+                aria-label="Visa alternativ"
+                (click)="toggleBtnHidden(book.id)"
+              ></fa-icon>
             }
           </li>
         }
+      }
+      @if (books.length === 0) {
+        <li class="list-group-item p-3 text-md-center font-weight-bold text-uppercase">
+          Listan är tom
+        </li>
       }
     </ul>
   </section>

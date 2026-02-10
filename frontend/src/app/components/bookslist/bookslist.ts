@@ -3,7 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEllipsis,
+  faEyeSlash,
+  faPenToSquare,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../environments/environment';
 import { ErrorMessageService } from '../../service/ErrorMessageService';
 import { AuthService } from '../../auth/auth.service';
@@ -23,6 +28,8 @@ interface Book {
 export class Bookslist implements OnInit {
   faPenToSquare = faPenToSquare;
   faTrash = faTrashCan;
+  faEllipsis = faEllipsis;
+  faEye = faEyeSlash;
 
   auth = inject(AuthService);
 
@@ -31,10 +38,16 @@ export class Bookslist implements OnInit {
 
   newBookTitle: string = '';
   newBookAuthor: string = '';
-
   isBookModalOpen: boolean = false;
   isBookEditModalOpen: boolean = false;
   editingBookIndex: number | null = null;
+  selectedBookId: number | null = null;
+
+  toggleBtnHidden(bookId: number | null) {
+    if (this.selectedBookId !== bookId) {
+      this.selectedBookId = bookId;
+    }
+  }
 
   toggleBookModal() {
     if (!this.isBookEditModalOpen) {
