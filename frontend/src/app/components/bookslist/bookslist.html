@@ -55,6 +55,11 @@
           </li>
         }
       }
+      @if (books.length === 0) {
+        <li class="list-group-item p-3 text-md-center font-weight-bold text-uppercase">
+          Listan är tom
+        </li>
+      }
     </ul>
   </section>
 

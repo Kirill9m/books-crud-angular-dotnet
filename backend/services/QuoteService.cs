@@ -1,6 +1,7 @@
 using BooksApi.Data;
 using BooksApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace BooksApi.Services;
 
@@ -18,6 +19,13 @@ public class QuoteService(AppDbContext context) : IQuoteService
         context.Quotes.Add(quote);
         await context.SaveChangesAsync();
         return quote;
+    }
+
+    public async Task<List<Quote>> CreateQuotesAsync(IEnumerable<Quote> quotes)
+    {
+        context.Quotes.AddRange(quotes);
+        await context.SaveChangesAsync();
+        return quotes.ToList();
     }
 
     public async Task<Quote?> UpdateQuoteAsync(Quote quote, Guid userId)

@@ -4,7 +4,6 @@ using System.Text;
 using BooksApi.Data;
 using BooksApi.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -28,11 +27,11 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
         return CreateToken(user);
     }
 
-    public async Task<string?> RegisterAsync(UserDto request)
+    public async Task<(string?, User?)> RegisterAsync(UserDto request)
     {
         if (await context.Users.AnyAsync(u => u.Username == request.Username))
         {
-            return null;
+            return (null, null);
         }
 
         var user = new User();
@@ -44,7 +43,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration) : I
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return CreateToken(user);
+        return (CreateToken(user), user);
     }
 
     public async Task<User?> GetCurrentUserAsync(string token)

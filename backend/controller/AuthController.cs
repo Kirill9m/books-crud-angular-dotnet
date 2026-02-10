@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using BooksApi.Models;
 using BooksApi.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace BooksApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(IAuthService authService) : ControllerBase
+    public class AuthController(IAuthService authService, IQuoteService quoteService) : ControllerBase
     {
         public static User user = new();
 
@@ -24,12 +25,22 @@ namespace BooksApi.Controllers
                 return BadRequest("Användarnamn måste vara minst 3 tecken och lösenord måste vara minst 8 tecken");
             }
 
-            var registeredUserToken = await authService.RegisterAsync(request);
+            var (registeredUserToken, registeredUser) = await authService.RegisterAsync(request);
 
             if (registeredUserToken == null)
             {
                 return BadRequest("Användaren finns redan");
             }
+
+            var initialQuotes = new List<Quote>
+            {
+                new Quote("Välkommen till din personliga citat-lista!", registeredUser!.Id),
+                new Quote("Här kommer din första citat.", registeredUser!.Id),
+                new Quote("Lägg till dina egna citat för att komma igång.", registeredUser!.Id),
+                new Quote("Tips: du kan redigera eller ta bort citat senare.", registeredUser!.Id),
+                new Quote("Ha en fantastisk dag!", registeredUser!.Id)
+            };
+            await quoteService.CreateQuotesAsync(initialQuotes);
 
             return Ok(registeredUserToken);
         }
