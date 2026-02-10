@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ErrorMessageService } from '../../service/ErrorMessageService';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons/faEllipsis';
-import { faEyeSlash, faRectangleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 interface Quote {
   id: number | null;
@@ -23,27 +23,23 @@ interface Quote {
 })
 export class QuotesList {
   http = inject(HttpClient);
-  auth = inject(AuthService);
   errorMessageService = inject(ErrorMessageService);
   faPenToSquare = faPenToSquare;
   faTrash = faTrashCan;
   faEllipsis = faEllipsis;
   faEye = faEyeSlash;
-  xmark = faRectangleXmark;
   selectedQuoteId: number | null = null;
   editingQuoteIndex: number | null = null;
   quoteEditMode: boolean = false;
 
   toggleBtnHidden(quoteId: number | null) {
-    if (this.selectedQuoteId === quoteId) {
-    } else {
+    if (this.selectedQuoteId !== quoteId) {
       this.selectedQuoteId = quoteId;
     }
   }
 
   newQuoteText: string = '';
   quotes: Quote[] = [];
-  isQuoteModalOpen: boolean = false;
 
   ngOnInit(): void {
     this.getQuotes();
@@ -54,9 +50,13 @@ export class QuotesList {
       this.toggleBtnHidden(null);
       this.quoteEditMode = true;
       this.editingQuoteIndex = this.quotes.findIndex((q) => q.id === quoteId);
-      if (this.editingQuoteIndex !== null) {
+      if (this.editingQuoteIndex !== -1) {
         const quote = this.quotes[this.editingQuoteIndex];
         this.newQuoteText = quote.text;
+      } else {
+        this.quoteEditMode = false;
+        this.editingQuoteIndex = null;
+        this.newQuoteText = '';
       }
     } else {
       this.quoteEditMode = false;
@@ -89,7 +89,6 @@ export class QuotesList {
         next: (quote: Quote) => {
           this.quotes.push(quote);
           this.newQuoteText = '';
-          this.isQuoteModalOpen = false;
         },
         error: (error) => {
           if (error.status === 401) {

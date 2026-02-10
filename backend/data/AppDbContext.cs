@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using BooksApi.Models;
-using api.Migrations;
 
 namespace BooksApi.Data;
 

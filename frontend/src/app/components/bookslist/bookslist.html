@@ -11,14 +11,14 @@
             <span
               ><strong>{{ book.title | titlecase }}</strong> by {{ book.author | titlecase }}</span
             >
-            @if (auth.isAuthed() && selectedQuoteId === book.id) {
+            @if (auth.isAuthed() && selectedBookId === book.id) {
               <div class="btn-group gap-1" role="group">
                 <fa-icon
                   [icon]="faEye"
                   class="btn btn-sm"
                   role="button"
                   tabindex="0"
-                  aria-label="Redigera bok"
+                  aria-label="Dölj alternativ"
                   (click)="toggleBtnHidden(null)"
                 ></fa-icon>
                 <fa-icon
@@ -42,7 +42,7 @@
                   (keyup.space)="removeBook(book.id)"
                 ></fa-icon>
               </div>
-            } @else {
+            } @else if (auth.isAuthed()) {
               <fa-icon
                 [icon]="faEllipsis"
                 class="btn btn-outline-secondary btn-sm"

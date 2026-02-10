@@ -5,7 +5,7 @@ public class QuoteCreateDto
     public string? Text { get; set; }
 }
 
-public class QuouteResponseDto
+public class QuoteResponseDto
 {
     public int Id { get; set; }
     public string? Text { get; set; }
@@ -13,6 +13,5 @@ public class QuouteResponseDto
 
 public class QuoteUpdateDto
 {
-    public int Id { get; set; }
     public string? Text { get; set; }
 }

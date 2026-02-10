@@ -32,13 +32,17 @@ namespace BooksApi.Controllers
                 return BadRequest("Användaren finns redan");
             }
 
+            if (registeredUser == null)
+            {
+                return StatusCode(500, "Ett oväntat fel inträffade vid skapande av användare.");
+            }
             var initialQuotes = new List<Quote>
             {
-                new Quote("Välkommen till din personliga citat-lista!", registeredUser!.Id),
-                new Quote("Här kommer din första citat.", registeredUser!.Id),
-                new Quote("Lägg till dina egna citat för att komma igång.", registeredUser!.Id),
-                new Quote("Tips: du kan redigera eller ta bort citat senare.", registeredUser!.Id),
-                new Quote("Ha en fantastisk dag!", registeredUser!.Id)
+                new Quote("Välkommen till din personliga citat-lista!", registeredUser.Id),
+                new Quote("Här kommer din första citat.", registeredUser.Id),
+                new Quote("Lägg till dina egna citat för att komma igång.", registeredUser.Id),
+                new Quote("Tips: du kan redigera eller ta bort citat senare.", registeredUser.Id),
+                new Quote("Ha en fantastisk dag!", registeredUser.Id)
             };
             await quoteService.CreateQuotesAsync(initialQuotes);
 

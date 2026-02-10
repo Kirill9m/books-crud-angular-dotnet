@@ -10,7 +10,7 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
 {
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<List<QuouteResponseDto>>> GetQuotes()
+    public async Task<ActionResult<List<QuoteResponseDto>>> GetQuotes()
     {
         var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var currentUser = await authService.GetCurrentUserAsync(token);
@@ -20,12 +20,12 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
         }
 
         var quotes = await quoteService.GetQuotesAsync(currentUser.Id);
-        return Ok(quotes.Select(q => new QuouteResponseDto { Id = q.Id, Text = q.Text }).ToList());
+        return Ok(quotes.Select(q => new QuoteResponseDto { Id = q.Id, Text = q.Text }).ToList());
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<QuouteResponseDto>> CreateQuote(QuoteCreateDto request)
+    public async Task<ActionResult<QuoteResponseDto>> CreateQuote(QuoteCreateDto request)
     {
         var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var currentUser = await authService.GetCurrentUserAsync(token);
@@ -41,12 +41,12 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
 
         var quote = new Quote(request.Text, currentUser.Id);
         var createdQuote = await quoteService.CreateQuoteAsync(quote);
-        return Ok(new QuouteResponseDto { Id = createdQuote.Id, Text = createdQuote.Text });
+        return Ok(new QuoteResponseDto { Id = createdQuote.Id, Text = createdQuote.Text });
     }
 
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<ActionResult<QuouteResponseDto>> UpdateQuote(int id, QuoteUpdateDto request)
+    public async Task<ActionResult<QuoteResponseDto>> UpdateQuote(int id, QuoteUpdateDto request)
     {
         var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var currentUser = await authService.GetCurrentUserAsync(token);
@@ -66,7 +66,7 @@ public class QuotesController(IQuoteService quoteService, IAuthService authServi
         {
             return NotFound("Citatet hittades inte");
         }
-        return Ok(new QuouteResponseDto { Id = updatedQuote.Id, Text = updatedQuote.Text });
+        return Ok(new QuoteResponseDto { Id = updatedQuote.Id, Text = updatedQuote.Text });
     }
 
     [Authorize]

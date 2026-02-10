@@ -41,12 +41,11 @@ export class Bookslist implements OnInit {
   isBookModalOpen: boolean = false;
   isBookEditModalOpen: boolean = false;
   editingBookIndex: number | null = null;
-  selectedQuoteId: number | null = null;
+  selectedBookId: number | null = null;
 
-  toggleBtnHidden(quoteId: number | null) {
-    if (this.selectedQuoteId === quoteId) {
-    } else {
-      this.selectedQuoteId = quoteId;
+  toggleBtnHidden(bookId: number | null) {
+    if (this.selectedBookId !== bookId) {
+      this.selectedBookId = bookId;
     }
   }
 
