@@ -7,6 +7,8 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
     [JsonIgnore]
     public List<Quote> Quotes { get; set; } = new();
+    [JsonIgnore]
+    public List<Book> Books { get; set; } = new();
 
     public User(string username, string passwordHash)
     {

@@ -31,10 +31,11 @@ export class Bookslist implements OnInit {
   faEllipsis = faEllipsis;
   faEye = faEyeSlash;
 
-  auth = inject(AuthService);
-
   books: Book[] = [];
-  constructor(public errorMessageService: ErrorMessageService) {}
+  constructor(
+    public errorMessageService: ErrorMessageService,
+    public auth: AuthService,
+  ) {}
 
   newBookTitle: string = '';
   newBookAuthor: string = '';
@@ -83,7 +84,16 @@ export class Bookslist implements OnInit {
   http = inject(HttpClient);
 
   ngOnInit(): void {
-    this.getBooks();
+    if (this.auth.isAuthed()) {
+      this.getBooks();
+      return;
+    }
+
+    if (localStorage.getItem('token')) {
+      this.auth.refreshMe().subscribe((ok) => {
+        if (ok) this.getBooks();
+      });
+    }
   }
 
   getBooks() {

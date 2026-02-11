@@ -6,14 +6,13 @@ namespace BooksApi.Services;
 
 public class BookService(AppDbContext context) : IBookService
 {
-    public async Task<List<Book>> GetBooksAsync()
+    public async Task<List<Book>> GetBooksAsync(Guid userId)
     {
-        return await context.Books.ToListAsync();
+        return await context.Books.Where(b => b.UserId == userId).ToListAsync();
     }
-
-    public async Task<Book?> GetBookByIdAsync(int id)
+    public async Task<Book?> GetBookByIdAsync(int id, Guid userId)
     {
-        return await context.Books.FindAsync(id);
+        return await context.Books.FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
     }
 
     public async Task<Book> CreateBookAsync(Book book)
@@ -25,7 +24,7 @@ public class BookService(AppDbContext context) : IBookService
 
     public async Task<Book?> UpdateBookAsync(int id, Book book)
     {
-        var existingBook = await context.Books.FindAsync(id);
+        var existingBook = await context.Books.FirstOrDefaultAsync(b => b.Id == id && b.UserId == book.UserId);
         if (existingBook == null)
         {
             return null;
@@ -38,9 +37,9 @@ public class BookService(AppDbContext context) : IBookService
         return existingBook;
     }
 
-    public async Task<bool> DeleteBookAsync(int id)
+    public async Task<bool> DeleteBookAsync(int id, Guid userId)
     {
-        var book = await context.Books.FindAsync(id);
+        var book = await context.Books.FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
         if (book == null)
         {
             return false;

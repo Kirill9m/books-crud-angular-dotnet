@@ -7,19 +7,32 @@ using Microsoft.AspNetCore.Authorization;
 namespace BooksApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class BooksController(IBookService bookService) : ControllerBase
+public class BooksController(IBookService bookService, IAuthService authService) : ControllerBase
 {
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<Book>>> GetBooks()
     {
-        var books = await bookService.GetBooksAsync();
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var currentUser = await authService.GetCurrentUserAsync(token);
+        if (currentUser == null)
+        {
+            return Unauthorized("Användaren är inte auktoriserad");
+        }
+        var books = await bookService.GetBooksAsync(currentUser.Id);
         return Ok(books);
     }
     [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<Book>> GetBookById(int id)
     {
-        var book = await bookService.GetBookByIdAsync(id);
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var currentUser = await authService.GetCurrentUserAsync(token);
+        if (currentUser == null)
+        {
+            return Unauthorized("Användaren är inte auktoriserad");
+        }
+        var book = await bookService.GetBookByIdAsync(id, currentUser.Id);
         if (book == null)
         {
             return NotFound();
@@ -36,6 +49,13 @@ public class BooksController(IBookService bookService) : ControllerBase
         }
 
         var book = new Book(newBook.Title, newBook.Author);
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var currentUser = await authService.GetCurrentUserAsync(token);
+        if (currentUser == null)
+        {
+            return Unauthorized("Användaren är inte auktoriserad");
+        }
+        book.UserId = currentUser.Id;
         await bookService.CreateBookAsync(book);
         return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
     }
@@ -50,6 +70,14 @@ public class BooksController(IBookService bookService) : ControllerBase
 
         var newBook = new Book(updatedBook.Title, updatedBook.Author);
 
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var currentUser = await authService.GetCurrentUserAsync(token);
+        if (currentUser == null)
+        {
+            return Unauthorized("Användaren är inte auktoriserad");
+        }
+        newBook.UserId = currentUser.Id;
+
         var existingBook = await bookService.UpdateBookAsync(id, newBook);
 
         if (existingBook == null)
@@ -62,9 +90,14 @@ public class BooksController(IBookService bookService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {
-        var result = await bookService.DeleteBookAsync(id);
-
-        if (!result)
+        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var currentUser = await authService.GetCurrentUserAsync(token);
+        if (currentUser == null)
+        {
+            return Unauthorized("Användaren är inte auktoriserad");
+        }
+        var success = await bookService.DeleteBookAsync(id, currentUser.Id);
+        if (!success)
         {
             return NotFound();
         }

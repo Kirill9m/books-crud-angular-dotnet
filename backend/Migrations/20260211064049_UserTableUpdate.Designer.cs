@@ -3,6 +3,7 @@ using System;
 using BooksApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260211064049_UserTableUpdate")]
+    partial class UserTableUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
@@ -39,6 +42,29 @@ namespace api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Author = "F. Scott Fitzgerald",
+                            Title = "The Great Gatsby",
+                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Author = "Harper Lee",
+                            Title = "To Kill a Mockingbird",
+                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Author = "George Orwell",
+                            Title = "1984",
+                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
                 });
 
             modelBuilder.Entity("BooksApi.Models.Quote", b =>

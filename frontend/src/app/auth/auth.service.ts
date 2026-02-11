@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 export type MeDto = { username: string };
 
@@ -10,7 +11,10 @@ export class AuthService {
   isAuthed = signal(false);
   me = signal<MeDto | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   refreshMe() {
     return this.http.get<MeDto>(`${environment.apiBaseUrl}/api/auth/me`).pipe(
@@ -31,5 +35,6 @@ export class AuthService {
     localStorage.removeItem('token');
     this.me.set(null);
     this.isAuthed.set(false);
+    this.router.navigate(['/login']).then(() => window.location.reload());
   }
 }

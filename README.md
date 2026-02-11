@@ -36,10 +36,15 @@ Database: SQLite
 
 ### Backend
 cd backend
+
 dotnet run
+
 https://www.nuget.org/
+
 openssl rand -base64 64
+
 dotnet tool run dotnet-ef migrations add UpdateModel
+
 dotnet tool run dotnet-ef database update
 
 ### Frontend
