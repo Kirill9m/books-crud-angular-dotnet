@@ -32,15 +32,6 @@ namespace api.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.InsertData(
-                table: "Books",
-                columns: new[] { "Id", "Author", "Title", "UserId" },
-                values: new object[,]
-                {
-                    { -3, "George Orwell", "1984", new Guid("00000000-0000-0000-0000-000000000000") },
-                    { -2, "Harper Lee", "To Kill a Mockingbird", new Guid("00000000-0000-0000-0000-000000000000") },
-                    { -1, "F. Scott Fitzgerald", "The Great Gatsby", new Guid("00000000-0000-0000-0000-000000000000") }
-                });
         }
     }
 }

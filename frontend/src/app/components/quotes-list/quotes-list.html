@@ -39,7 +39,7 @@
           [attr.tabindex]="quoteEditMode ? -1 : 0"
           aria-label="Visa alternativ"
           [attr.aria-disabled]="quoteEditMode ? 'true' : 'false'"
-          (click)="toggleBtnHidden(quote.id)"
+          (click)="quoteEditMode ? null : toggleBtnHidden(quote.id)"
         ></fa-icon>
       }
     </li>

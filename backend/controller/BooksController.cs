@@ -9,6 +9,7 @@ namespace BooksApi.Controllers;
 [ApiController]
 public class BooksController(IBookService bookService, IAuthService authService) : ControllerBase
 {
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<Book>>> GetBooks()
     {

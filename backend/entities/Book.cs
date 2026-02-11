@@ -8,6 +8,7 @@ public class Book
     public string Author { get; set; } = string.Empty;
     [JsonIgnore]
     public Guid UserId { get; set; }
+    [JsonIgnore]
     public User? User { get; set; }
 
     public Book(string title, string author)
