@@ -12,17 +12,16 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Book>().HasData(
-            new Book("The Great Gatsby", "F. Scott Fitzgerald") { Id = -1 },
-            new Book("To Kill a Mockingbird", "Harper Lee") { Id = -2 },
-            new Book("1984", "George Orwell") { Id = -3 }
-        );
-
         modelBuilder.Entity<Quote>()
             .HasOne(q => q.User)
             .WithMany(u => u.Quotes)
             .HasForeignKey(q => q.UserId)
+            .IsRequired();
+
+        modelBuilder.Entity<Book>()
+            .HasOne(b => b.User)
+            .WithMany(u => u.Books)
+            .HasForeignKey(b => b.UserId)
             .IsRequired();
     }
     public DbSet<Book> Books => Set<Book>();

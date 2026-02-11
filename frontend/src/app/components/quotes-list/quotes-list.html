@@ -34,10 +34,11 @@
         <fa-icon
           [icon]="faEllipsis"
           class="btn btn-outline-secondary btn-sm"
-          [class]="quoteEditMode ? 'disabled' : ''"
+          [class.disabled]="quoteEditMode"
           role="button"
-          tabindex="0"
+          [attr.tabindex]="quoteEditMode ? -1 : 0"
           aria-label="Visa alternativ"
+          [attr.aria-disabled]="quoteEditMode ? 'true' : 'false'"
           (click)="toggleBtnHidden(quote.id)"
         ></fa-icon>
       }
