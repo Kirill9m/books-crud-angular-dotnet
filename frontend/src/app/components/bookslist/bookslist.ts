@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +21,7 @@ interface Book {
 
 @Component({
   selector: 'app-bookslist',
-  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, AsyncPipe],
   templateUrl: './bookslist.html',
   styleUrl: './bookslist.scss',
 })

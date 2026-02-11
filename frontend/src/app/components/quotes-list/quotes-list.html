@@ -65,7 +65,7 @@
   } @else {
     <button (click)="addNewQuote()" type="button" class="btn btn-primary">Lägg till</button>
   }
-  @if (errorMessageService.errorMessage) {
-    <div class="alert alert-danger">{{ errorMessageService.errorMessage }}</div>
+  @if (errorMessageService.message$ | async) {
+    <div class="alert alert-danger">{{ errorMessageService.message$ | async }}</div>
   }
 </section>

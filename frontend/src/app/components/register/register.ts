@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -9,7 +9,7 @@ import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-register',
-  imports: [RouterLink, CommonModule, FormsModule],
+  imports: [RouterLink, CommonModule, FormsModule, AsyncPipe],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

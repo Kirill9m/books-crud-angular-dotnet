@@ -9,6 +9,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons/faPenToSquare';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons/faEllipsis';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { AsyncPipe } from '@angular/common';
 
 interface Quote {
   id: number | null;
@@ -17,7 +18,7 @@ interface Quote {
 
 @Component({
   selector: 'app-quotes-list',
-  imports: [FormsModule, FaIconComponent],
+  imports: [FormsModule, FaIconComponent, AsyncPipe],
   templateUrl: './quotes-list.html',
   styleUrl: './quotes-list.css',
 })
