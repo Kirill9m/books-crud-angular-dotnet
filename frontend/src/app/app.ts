@@ -1,5 +1,5 @@
 import { Component, DOCUMENT, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCloudSun, faInfo, faUser, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [FontAwesomeModule, RouterLink, RouterOutlet, FormsModule, NgStyle],
+  imports: [FontAwesomeModule, RouterLink, RouterOutlet, FormsModule, NgStyle, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
