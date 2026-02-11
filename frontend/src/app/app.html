@@ -20,36 +20,42 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav d-flex justify-content-between w-100">
-        <div class="d-flex">
-          <a class="nav-link" aria-current="page" routerLink="/">Home</a>
-          @if (auth.isAuthed()) {
-            <a class="nav-link" routerLink="quotes">Quotes</a>
-          }
-          @if (!auth.isAuthed()) {
-            <fa-icon class="nav-link" role="button" [icon]="infoBtn" (click)="showHint()">
-            </fa-icon>
-          }
-        </div>
-        <span class="d-flex">
-          @if (!auth.isAuthed()) {
-            <fa-icon
-              class="nav-link text-primary"
-              role="button"
-              [icon]="userLogo"
-              routerLink="login"
-              [class]="hintClass"
-            ></fa-icon>
-          } @else {
-            <span class="nav-link">Välkommen, {{ auth.me()?.username }}</span>
-            <fa-icon
-              class="nav-link"
-              role="button"
-              (click)="auth.logout()"
-              [icon]="logoutLogo"
-            ></fa-icon>
-          }
-        </span>
+      <div class="navbar-nav d-flex flex-column flex-lg-row me-auto">
+        <a
+          class="nav-link"
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-current="page"
+          >Home</a
+        >
+        @if (auth.isAuthed()) {
+          <a class="nav-link" routerLink="quotes" routerLinkActive="active">Quotes</a>
+        }
+        @if (!auth.isAuthed()) {
+          <fa-icon class="nav-link" role="button" [icon]="infoBtn" (click)="showHint()"> </fa-icon>
+        }
+      </div>
+      <div class="d-flex align-items-center gap-2 justify-content-end">
+        @if (!auth.isAuthed()) {
+          <fa-icon
+            class="nav-link text-primary"
+            role="button"
+            [icon]="userLogo"
+            routerLink="login"
+            routerLinkActive="active"
+            [class]="hintClass"
+          ></fa-icon
+          >"
+        } @else {
+          <span class="nav-link">Välkommen, {{ auth.me()?.username }}</span>
+          <fa-icon
+            class="nav-link text-danger"
+            role="button"
+            (click)="auth.logout()"
+            [icon]="logoutLogo"
+          ></fa-icon>
+        }
       </div>
     </div>
   </div>
